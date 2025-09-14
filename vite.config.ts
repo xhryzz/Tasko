@@ -36,7 +36,7 @@ export default defineConfig({
     }),
     DEV_ENABLE_HTTPS && basicSsl(),
     // Generate QR code for npm run dev:host
-    qrcode({ filter: (url) => /^https?:\/\/192\.168\.0\./.test(url) }),
+    qrcode({ filter: (url) => /^https?:\/\/192\.168\./.test(url) }),
     // https://vite-pwa-org.netlify.app/
     VitePWA({
       manifest, // manifest.ts
@@ -98,5 +98,9 @@ export default defineConfig({
         },
       },
     },
+  },
+  server: {
+    host: '0.0.0.0',  // Asegura que el servidor escuche en todas las interfaces
+    port: 5173,
   },
 });
