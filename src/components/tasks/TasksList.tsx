@@ -65,7 +65,7 @@ const TaskMenuButton = memo(
   ({ task, onClick }: { task: Task; onClick: (event: React.MouseEvent<HTMLElement>) => void }) => (
     <IconButton
       id="task-menu-button"
-      aria-label="Task Menu"
+      aria-label="Menú de Tarea"
       aria-controls="task-menu"
       aria-haspopup="true"
       aria-expanded={Boolean(task)}
@@ -78,7 +78,7 @@ const TaskMenuButton = memo(
 );
 
 /**
- * Component to display a list of tasks.
+ * Componente para mostrar una lista de tareas.
  */
 export const TasksList: React.FC = () => {
   const { user, setUser } = useContext(UserContext);
@@ -125,18 +125,18 @@ export const TasksList: React.FC = () => {
 
   const listFormat = useMemo(
     () =>
-      new Intl.ListFormat("en-US", {
+      new Intl.ListFormat("es-ES", {
         style: "long",
         type: "conjunction",
       }),
     [],
   );
 
-  // Handler for clicking the more options button in a task
+  // Manejador para hacer clic en el botón de más opciones en una tarea
   const handleClick = (event: React.MouseEvent<HTMLElement>, taskId: UUID) => {
     const target = event.target as HTMLElement;
 
-    // if clicking inside a task link, show native context menu and skip custom menu.
+    // si se hace clic dentro de un enlace de tarea, mostrar menú contextual nativo y omitir menú personalizado.
     if (target.closest("#task-description-link")) {
       return;
     }
@@ -155,7 +155,7 @@ export const TasksList: React.FC = () => {
     // }
   };
 
-  // focus search input on ctrl + /
+  // enfocar input de búsqueda con ctrl + /
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key === "/") {
@@ -170,11 +170,11 @@ export const TasksList: React.FC = () => {
 
   const reorderTasks = useCallback(
     (tasks: Task[]): Task[] => {
-      // Separate tasks into pinned and unpinned
+      // Separar tareas en fijadas y no fijadas
       let pinnedTasks = tasks.filter((task) => task.pinned);
       let unpinnedTasks = tasks.filter((task) => !task.pinned);
 
-      // Filter tasks based on the selected category
+      // Filtrar tareas basadas en la categoría seleccionada
       if (selectedCatId !== undefined) {
         const categoryFilter = (task: Task) =>
           task.category?.some((category) => category.id === selectedCatId) ?? false;
@@ -182,7 +182,7 @@ export const TasksList: React.FC = () => {
         pinnedTasks = pinnedTasks.filter(categoryFilter);
       }
 
-      // Filter tasks based on the search input
+      // Filtrar tareas basadas en la entrada de búsqueda
       const searchLower = search.toLowerCase();
       const searchFilter = (task: Task) =>
         task.name.toLowerCase().includes(searchLower) ||
@@ -190,7 +190,7 @@ export const TasksList: React.FC = () => {
       unpinnedTasks = unpinnedTasks.filter(searchFilter);
       pinnedTasks = pinnedTasks.filter(searchFilter);
 
-      // Sort tasks based on the selected sort option
+      // Ordenar tareas basadas en la opción de orden seleccionada
       const sortTasks = (tasks: Task[]) => {
         switch (sortOption) {
           case "dateCreated":
@@ -221,7 +221,7 @@ export const TasksList: React.FC = () => {
       unpinnedTasks = sortTasks(unpinnedTasks);
       pinnedTasks = sortTasks(pinnedTasks);
 
-      // Move done tasks to bottom if the setting is enabled
+      // Mover tareas completadas al final si la configuración está habilitada
       if (user.settings?.doneToBottom) {
         const doneTasks = unpinnedTasks.filter((task) => task.done);
         const notDoneTasks = unpinnedTasks.filter((task) => !task.done);
@@ -248,7 +248,7 @@ export const TasksList: React.FC = () => {
     setDeleteDialogOpen(false);
     showToast(
       <div>
-        Deleted Task - <b translate="no">{taskToDelete?.name}</b>
+        Tarea Eliminada - <b translate="no">{taskToDelete?.name}</b>
       </div>,
     );
     setTaskToDelete(null);
@@ -262,7 +262,7 @@ export const TasksList: React.FC = () => {
   }, [selectedTaskId, deleteDialogOpen, user.tasks]);
 
   const cancelDeleteTask = () => {
-    // Cancels the delete task operation
+    // Cancela la operación de eliminar tarea
     setDeleteDialogOpen(false);
   };
 
@@ -271,13 +271,13 @@ export const TasksList: React.FC = () => {
       ...prevUser,
       tasks: prevUser.tasks.map((task) => {
         if (multipleSelectedTasks.includes(task.id)) {
-          // Mark the task as done if selected
+          // Marcar la tarea como completada si está seleccionada
           return { ...task, done: true, lastSave: new Date() };
         }
         return task;
       }),
     }));
-    // Clear the selected task IDs after the operation
+    // Limpiar los IDs de tareas seleccionadas después de la operación
     setMultipleSelectedTasks([]);
   };
 
@@ -297,7 +297,7 @@ export const TasksList: React.FC = () => {
       }
     });
 
-    // Calculate category counts
+    // Calcular conteos de categorías
     const counts: { [categoryId: UUID]: number } = {};
     uniqueCategories.forEach((category) => {
       const categoryTasks = tasks.filter((task) =>
@@ -306,7 +306,7 @@ export const TasksList: React.FC = () => {
       counts[category.id] = categoryTasks.length;
     });
 
-    // sort categories by count (descending) then by name (ascending) if counts are equal
+    // ordenar categorías por conteo (descendente) luego por nombre (ascendente) si los conteos son iguales
     uniqueCategories.sort((a, b) => {
       const countA = counts[a.id] || 0;
       const countB = counts[b.id] || 0;
@@ -337,7 +337,7 @@ export const TasksList: React.FC = () => {
 
         showToast(
           <div translate="no" style={{ wordBreak: "break-word" }}>
-            <b translate="yes">Overdue task{overdueTasks.length > 1 && "s"}: </b>
+            <b translate="yes">Tarea{overdueTasks.length > 1 && "s"} vencida{overdueTasks.length > 1 && "s"}: </b>
             {listFormat.format(taskNames)}
           </div>,
           {
@@ -381,9 +381,9 @@ export const TasksList: React.FC = () => {
     const newIndex = orderedTasks.findIndex((task) => task.id === over.id);
     if (oldIndex === -1 || newIndex === -1) return;
 
-    // calculate new positions for all tasks in the new order
+    // calcular nuevas posiciones para todas las tareas en el nuevo orden
     const newOrdered = arrayMove(orderedTasks, oldIndex, newIndex);
-    // assign position as index
+    // asignar posición como índice
     const updatedTasks = user.tasks.map((task) => {
       const idx = newOrdered.findIndex((t) => t.id === task.id);
       return idx !== -1 ? { ...task, position: idx, lastSave: new Date() } : task;
@@ -411,7 +411,7 @@ export const TasksList: React.FC = () => {
               <SearchInput
                 inputRef={searchRef}
                 color="primary"
-                placeholder="Search for task..."
+                placeholder="Buscar tarea..."
                 autoComplete="off"
                 value={search}
                 disabled={moveMode}
@@ -496,8 +496,7 @@ export const TasksList: React.FC = () => {
           <TaskActionContainer>
             <div>
               <h3>
-                <RadioButtonChecked /> &nbsp; Selected {multipleSelectedTasks.length} task
-                {multipleSelectedTasks.length > 1 ? "s" : ""}
+                <RadioButtonChecked /> &nbsp; Seleccionada{multipleSelectedTasks.length > 1 ? "s" : ""} {multipleSelectedTasks.length} tarea{multipleSelectedTasks.length > 1 ? "s" : ""}
               </h3>
               <span translate="no" style={{ fontSize: "14px", opacity: 0.8 }}>
                 {listFormat.format(
@@ -507,9 +506,9 @@ export const TasksList: React.FC = () => {
                 )}
               </span>
             </div>
-            {/* TODO: add more features */}
+            {/* TODO: agregar más características */}
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <Tooltip title="Mark selected as done">
+              <Tooltip title="Marcar seleccionadas como completadas">
                 <IconButton
                   sx={{ color: getFontColor(theme.secondary) }}
                   size="large"
@@ -518,12 +517,12 @@ export const TasksList: React.FC = () => {
                   <DoneAll />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Delete selected">
+              <Tooltip title="Eliminar seleccionadas">
                 <IconButton color="error" size="large" onClick={handleDeleteSelected}>
                   <Delete />
                 </IconButton>
               </Tooltip>
-              <Tooltip sx={{ color: getFontColor(theme.secondary) }} title="Cancel">
+              <Tooltip sx={{ color: getFontColor(theme.secondary) }} title="Cancelar">
                 <IconButton size="large" onClick={() => setMultipleSelectedTasks([])}>
                   <CancelRounded />
                 </IconButton>
@@ -535,12 +534,12 @@ export const TasksList: React.FC = () => {
           <TaskActionContainer>
             <div>
               <h3>
-                <MoveUpRounded /> &nbsp; Move Mode Enabled
+                <MoveUpRounded /> &nbsp; Modo Mover Habilitado
               </h3>
-              <span>Organize tasks by dragging and dropping.</span>
+              <span>Organiza tareas arrastrando y soltando.</span>
             </div>
             <Button variant="contained" onClick={() => setMoveMode(false)}>
-              Done
+              Listo
             </Button>
           </TaskActionContainer>
         )}
@@ -554,8 +553,7 @@ export const TasksList: React.FC = () => {
             }}
           >
             <b>
-              Found {orderedTasks.length} task
-              {orderedTasks.length > 1 ? "s" : ""}
+              Encontrada{orderedTasks.length > 1 ? "s" : ""} {orderedTasks.length} tarea{orderedTasks.length > 1 ? "s" : ""}
             </b>
           </div>
         )}
@@ -611,7 +609,7 @@ export const TasksList: React.FC = () => {
                   easing: "ease-in-out",
                 }}
               >
-                {/* DRAG PREVIEW */}
+                {/* VISTA PREVIA DE ARRASTRE */}
                 {activeDragId ? (
                   <TaskItem
                     task={orderedTasks.find((t) => t.id === activeDragId)!}
@@ -666,16 +664,16 @@ export const TasksList: React.FC = () => {
           )
         ) : (
           <NoTasks>
-            <span>You don't have any tasks yet</span>
+            <span>Aún no tienes tareas</span>
             <br />
-            Click on the <span>+</span> button to add one
+            Haz clic en el botón <span>+</span> para agregar una
           </NoTasks>
         )}
         {search && orderedTasks.length === 0 && user.tasks.length > 0 ? (
           <TaskNotFound>
-            <b>No tasks found</b>
+            <b>No se encontraron tareas</b>
             <br />
-            Try searching with different keywords.
+            Intenta buscar con diferentes palabras clave.
             <div style={{ marginTop: "14px" }}>
               <TaskIcon scale={0.8} />
             </div>
@@ -689,8 +687,8 @@ export const TasksList: React.FC = () => {
       </TasksContainer>
       <Dialog open={deleteDialogOpen} onClose={cancelDeleteTask}>
         <CustomDialogTitle
-          title="Delete Task"
-          subTitle="Are you sure you want to delete this task?"
+          title="Eliminar Tarea"
+          subTitle="¿Estás seguro de que quieres eliminar esta tarea?"
           onClose={cancelDeleteTask}
           icon={<Delete />}
         />
@@ -706,17 +704,17 @@ export const TasksList: React.FC = () => {
         </DialogContent>
         <DialogActions>
           <DialogBtn onClick={cancelDeleteTask} color="primary">
-            Cancel
+            Cancelar
           </DialogBtn>
           <DialogBtn onClick={confirmDeleteTask} color="error">
-            <DeleteRounded /> &nbsp; Confirm Delete
+            <DeleteRounded /> &nbsp; Confirmar Eliminación
           </DialogBtn>
         </DialogActions>
       </Dialog>
       <Dialog open={deleteSelectedOpen}>
         <CustomDialogTitle
-          title="Delete selected tasks"
-          subTitle="Confirm to delete selected tasks"
+          title="Eliminar tareas seleccionadas"
+          subTitle="Confirma para eliminar las tareas seleccionadas"
           icon={<DeleteRounded />}
         />
         <DialogContent translate="no">
@@ -728,7 +726,7 @@ export const TasksList: React.FC = () => {
         </DialogContent>
         <DialogActions>
           <DialogBtn onClick={() => setDeleteSelectedOpen(false)} color="primary">
-            Cancel
+            Cancelar
           </DialogBtn>
           <DialogBtn
             onClick={() => {
@@ -740,13 +738,13 @@ export const TasksList: React.FC = () => {
                   ...multipleSelectedTasks.filter((id) => !prevUser.deletedTasks?.includes(id)),
                 ],
               }));
-              // Clear the selected task IDs after the operation
+              // Limpiar los IDs de tareas seleccionadas después de la operación
               setMultipleSelectedTasks([]);
               setDeleteSelectedOpen(false);
             }}
             color="error"
           >
-            Delete
+            Eliminar
           </DialogBtn>
         </DialogActions>
       </Dialog>

@@ -41,18 +41,18 @@ const AddTask = () => {
   const { toasts } = useToasterStore();
 
   useEffect(() => {
-    document.title = "Todo App - Add Task";
+    document.title = "Tasko - Agregar Tarea";
   }, []);
 
   useEffect(() => {
     if (name.length > TASK_NAME_MAX_LENGTH) {
-      setNameError(`Name should be less than or equal to ${TASK_NAME_MAX_LENGTH} characters`);
+      setNameError(`El nombre debe tener menos o igual a ${TASK_NAME_MAX_LENGTH} caracteres`);
     } else {
       setNameError("");
     }
     if (description.length > DESCRIPTION_MAX_LENGTH) {
       setDescriptionError(
-        `Description should be less than or equal to ${DESCRIPTION_MAX_LENGTH} characters`,
+        `La descripción debe tener menos o igual a ${DESCRIPTION_MAX_LENGTH} caracteres`,
       );
     } else {
       setDescriptionError("");
@@ -63,7 +63,7 @@ const AddTask = () => {
     const newName = event.target.value;
     setName(newName);
     if (newName.length > TASK_NAME_MAX_LENGTH) {
-      setNameError(`Name should be less than or equal to ${TASK_NAME_MAX_LENGTH} characters`);
+      setNameError(`El nombre debe tener menos o igual a ${TASK_NAME_MAX_LENGTH} caracteres`);
     } else {
       setNameError("");
     }
@@ -74,7 +74,7 @@ const AddTask = () => {
     setDescription(newDescription);
     if (newDescription.length > DESCRIPTION_MAX_LENGTH) {
       setDescriptionError(
-        `Description should be less than or equal to ${DESCRIPTION_MAX_LENGTH} characters`,
+        `La descripción debe tener menos o igual a ${DESCRIPTION_MAX_LENGTH} caracteres`,
       );
     } else {
       setDescriptionError("");
@@ -87,7 +87,7 @@ const AddTask = () => {
 
   const handleAddTask = () => {
     if (name === "") {
-      showToast("Task name is required.", {
+      showToast("El nombre de la tarea es requerido.", {
         type: "error",
         id: "task-name-required",
         preventDuplicate: true,
@@ -97,7 +97,7 @@ const AddTask = () => {
     }
 
     if (nameError !== "" || descriptionError !== "") {
-      return; // Do not add the task if the name or description exceeds the maximum length
+      return; // No agregar la tarea si el nombre o descripción excede la longitud máxima
     }
 
     const newTask: Task = {
@@ -122,7 +122,7 @@ const AddTask = () => {
 
     showToast(
       <div>
-        Added task - <b>{newTask.name}</b>
+        Tarea agregada - <b>{newTask.name}</b>
       </div>,
       {
         icon: <AddTaskRounded />,
@@ -135,7 +135,7 @@ const AddTask = () => {
 
   return (
     <>
-      <TopBar title="Add New Task" />
+      <TopBar title="Agregar Nueva Tarea" />
       <Container>
         <CustomEmojiPicker
           emoji={typeof emoji === "string" ? emoji : undefined}
@@ -144,12 +144,12 @@ const AddTask = () => {
           name={name}
           type="task"
         />
-        {/* fix for input colors */}
+        {/* corrección para colores de entrada */}
         <InputThemeProvider>
           <StyledInput
-            label="Task Name"
+            label="Nombre de Tarea"
             name="name"
-            placeholder="Enter task name"
+            placeholder="Ingresa el nombre de la tarea"
             autoComplete="off"
             value={name}
             onChange={handleNameChange}
@@ -165,9 +165,9 @@ const AddTask = () => {
             }
           />
           <StyledInput
-            label="Task Description"
+            label="Descripción de Tarea"
             name="name"
-            placeholder="Enter task description"
+            placeholder="Ingresa la descripción de la tarea"
             autoComplete="off"
             value={description}
             onChange={handleDescriptionChange}
@@ -184,15 +184,15 @@ const AddTask = () => {
             }
           />
           <StyledInput
-            label="Task Deadline"
+            label="Fecha Límite de Tarea"
             name="name"
-            placeholder="Enter deadline date"
+            placeholder="Ingresa fecha límite"
             type="datetime-local"
             value={deadline}
             onChange={handleDeadlineChange}
             onFocus={() => setIsDeadlineFocused(true)}
             onBlur={() => setIsDeadlineFocused(false)}
-            hidetext={(!deadline || deadline === "") && !isDeadlineFocused} // fix for label overlapping with input
+            hidetext={(!deadline || deadline === "") && !isDeadlineFocused} // corrección para etiqueta superpuesta con entrada
             sx={{
               colorScheme: isDark(theme.secondary) ? "dark" : "light",
             }}
@@ -201,7 +201,7 @@ const AddTask = () => {
                 startAdornment:
                   deadline && deadline !== "" ? (
                     <InputAdornment position="start">
-                      <Tooltip title="Clear">
+                      <Tooltip title="Limpiar">
                         <IconButton color="error" onClick={() => setDeadline("")}>
                           <CancelRounded />
                         </IconButton>
@@ -238,7 +238,7 @@ const AddTask = () => {
             name.length > TASK_NAME_MAX_LENGTH || description.length > DESCRIPTION_MAX_LENGTH
           }
         >
-          Create Task
+          Crear Tarea
         </AddTaskButton>
       </Container>
     </>

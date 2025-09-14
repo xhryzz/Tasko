@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import {
   AccessTimeFilledRounded,
   AddRounded,
-  AdjustRounded,
   BugReportRounded,
   CategoryRounded,
   DeleteForeverRounded,
@@ -79,13 +78,13 @@ export const ProfileSidebar = () => {
     };
 
     const fetchBMC: () => Promise<void> = async () => {
-      // Fetch data from the Buy Me a Coffee API
+      // Obtener datos de la API de Buy Me a Coffee
       const { supportersCount } = await fetchBMCInfo();
-      // In case BMC api fails
+      // En caso de que falle la API de BMC
       if (supportersCount > 0) {
         setBmcSupporters(supportersCount);
       } else {
-        console.error("No BMC supporters found.");
+        console.error("No se encontraron seguidores de BMC.");
       }
     };
 
@@ -162,16 +161,16 @@ export const ProfileSidebar = () => {
           //   }));
           // }
 
-          // Show a dialog to inform the user that the app is now running as a PWA on Windows
+          // Mostrar un diálogo para informar al usuario que la app ahora se ejecuta como PWA en Windows
           if (systemInfo.os === "Windows") {
             setOpenInstalledDialog(true);
           } else {
-            showToast("App installed successfully!");
+            showToast("¡App instalada exitosamente!");
           }
           handleClose();
         }
         if (choiceResult.outcome === "dismissed") {
-          showToast("Installation dismissed.", { type: "error" });
+          showToast("Instalación cancelada.", { type: "error" });
         }
       });
     }
@@ -198,9 +197,9 @@ export const ProfileSidebar = () => {
 
   return (
     <Container>
-      <Tooltip title={<div translate={name ? "no" : "yes"}>{name || "User"}</div>}>
+      <Tooltip title={<div translate={name ? "no" : "yes"}>{name || "Usuario"}</div>}>
         <IconButton
-          aria-label="Sidebar"
+          aria-label="Barra lateral"
           aria-controls={open ? "basic-menu" : undefined}
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
@@ -209,7 +208,7 @@ export const ProfileSidebar = () => {
         >
           <UserAvatar
             src={avatarSrc || undefined}
-            alt={name || "User"}
+            alt={name || "Usuario"}
             hasimage={profilePicture !== null}
             pulse={
               user.name === defaultUser.name &&
@@ -218,14 +217,14 @@ export const ProfileSidebar = () => {
             }
             size="52px"
             onError={() => {
-              // This prevents the error handling from being called unnecessarily when offline
+              // Esto evita que el manejo de errores se llame innecesariamente cuando está sin conexión
               if (!navigator.onLine) return;
               setUser((prevUser) => ({
                 ...prevUser,
                 profilePicture: null,
               }));
-              showToast("Error in profile picture URL", { type: "error" });
-              throw new Error("Error in profile picture URL");
+              showToast("Error en la URL de la foto de perfil", { type: "error" });
+              throw new Error("Error en la URL de la foto de perfil");
             }}
           >
             {name ? name[0].toUpperCase() : undefined}
@@ -249,17 +248,13 @@ export const ProfileSidebar = () => {
           }}
         >
           <Logo src="/logo192.png" alt="logo" />
-          <LogoText>
-            <span>Todo</span> App
-            <span>.</span>
-          </LogoText>
         </LogoContainer>
 
         <MenuLink to="/">
           <StyledMenuItem onClick={handleClose}>
-            <TaskAltRounded /> &nbsp; Tasks
+            <TaskAltRounded /> &nbsp; Tareas
             {tasks.filter((task) => !task.done).length > 0 && (
-              <Tooltip title={`${tasks.filter((task) => !task.done).length} tasks to do`}>
+              <Tooltip title={`${tasks.filter((task) => !task.done).length} tareas por hacer`}>
                 <MenuLabel>
                   {tasks.filter((task) => !task.done).length > 99
                     ? "99+"
@@ -272,35 +267,35 @@ export const ProfileSidebar = () => {
 
         <MenuLink to="/add">
           <StyledMenuItem onClick={handleClose}>
-            <AddRounded /> &nbsp; Add Task
+            <AddRounded /> &nbsp; Agregar Tarea
           </StyledMenuItem>
         </MenuLink>
 
         {settings.enableCategories !== undefined && settings.enableCategories && (
           <MenuLink to="/categories">
             <StyledMenuItem onClick={handleClose}>
-              <CategoryRounded /> &nbsp; Categories
+              <CategoryRounded /> &nbsp; Categorías
             </StyledMenuItem>
           </MenuLink>
         )}
 
         <MenuLink to="/purge">
           <StyledMenuItem onClick={handleClose}>
-            <DeleteForeverRounded /> &nbsp; Purge Tasks
+            <DeleteForeverRounded /> &nbsp; Purgar Tareas
           </StyledMenuItem>
         </MenuLink>
 
         <MenuLink to="/transfer">
           <StyledMenuItem onClick={handleClose}>
-            <GetAppRounded /> &nbsp; Transfer
+            <GetAppRounded /> &nbsp; Transferir
           </StyledMenuItem>
         </MenuLink>
 
         <MenuLink to="/sync">
           <StyledMenuItem onClick={handleClose}>
-            <PhonelinkRounded /> &nbsp; Sync Devices
+            <PhonelinkRounded /> &nbsp; Sincronizar Dispositivos
             {user.lastSyncedAt && (
-              <Tooltip title={`Last synced ${timeAgo(new Date(user.lastSyncedAt))}`}>
+              <Tooltip title={`Última sincronización ${timeAgo(new Date(user.lastSyncedAt))}`}>
                 <MenuLabel>
                   <span>
                     <AccessTimeFilledRounded style={{ fontSize: "16px" }} />
@@ -315,53 +310,25 @@ export const ProfileSidebar = () => {
         <StyledDivider />
 
         <MenuLink to="https://github.com/maciekt07/TodoApp">
-          <StyledMenuItem translate="no">
-            <GitHub className="GitHubIcon" /> &nbsp; Github{" "}
-            {stars && (
-              <Tooltip title={`${stars} stars on Github`}>
-                <MenuLabel clr="#ff9d00">
-                  <span>
-                    <StarRounded style={{ fontSize: "18px" }} />
-                    {stars}
-                  </span>
-                </MenuLabel>
-              </Tooltip>
-            )}
-          </StyledMenuItem>
-        </MenuLink>
+  <StyledMenuItem translate="no">
+    <GitHub className="GitHubIcon" /> &nbsp; Github
+  </StyledMenuItem>
+</MenuLink>
 
-        <MenuLink to="https://github.com/maciekt07/TodoApp/issues/new">
-          <StyledMenuItem>
-            <BugReportRounded className="BugReportRoundedIcon" /> &nbsp; Report Issue{" "}
-            {Boolean(issuesCount || issuesCount === 0) && (
-              <Tooltip title={`${issuesCount} open issues`}>
-                <MenuLabel clr="#3bb61c">
-                  <span>
-                    <AdjustRounded style={{ fontSize: "18px" }} />
-                    {issuesCount}
-                  </span>
-                </MenuLabel>
-              </Tooltip>
-            )}
-          </StyledMenuItem>
-        </MenuLink>
+<MenuLink to="mailto:christian.martinezbx@gmail.com">
+  <StyledMenuItem>
+    <BugReportRounded className="BugReportRoundedIcon" /> &nbsp; Reportar Problema
+  </StyledMenuItem>
+</MenuLink>
 
-        <MenuLink to="https://www.buymeacoffee.com/maciekt07">
-          <StyledMenuItem className="bmcMenu">
-            <BmcIcon className="bmc-icon" src={theme.darkmode ? bmcLogoLight : bmcLogo} /> &nbsp;
-            Buy me a coffee{" "}
-            {bmcSupporters && (
-              <Tooltip title={`${bmcSupporters} supporters on Buy me a coffee`}>
-                <MenuLabel clr="#f93c58">
-                  <span>
-                    <FavoriteRounded style={{ fontSize: "16px" }} />
-                    {bmcSupporters}
-                  </span>
-                </MenuLabel>
-              </Tooltip>
-            )}
-          </StyledMenuItem>
-        </MenuLink>
+
+<MenuLink to="https://www.paypal.com/paypalme/chriismartinezz">
+  <StyledMenuItem className="bmcMenu">
+    <BmcIcon className="bmc-icon" src={theme.darkmode ? bmcLogoLight : bmcLogo} /> &nbsp;
+    Cómprame un café
+  </StyledMenuItem>
+</MenuLink>
+
 
         <StyledDivider />
 
@@ -372,7 +339,7 @@ export const ProfileSidebar = () => {
             ) : (
               <InstallDesktopRounded className="InstallDesktopRoundedIcon" />
             )}
-            &nbsp; Install App
+            &nbsp; Instalar App
           </StyledMenuItem>
         )}
 
@@ -384,9 +351,9 @@ export const ProfileSidebar = () => {
               onClick={() => {
                 showToast(
                   <div style={{ display: "inline-block" }}>
-                    To install the app on iOS Safari, click on{" "}
-                    <IosShareRounded sx={{ verticalAlign: "middle", mb: "4px" }} /> and then{" "}
-                    <span style={{ fontWeight: "bold" }}>Add to Home Screen</span>.
+                    Para instalar la app en iOS Safari, haz clic en{" "}
+                    <IosShareRounded sx={{ verticalAlign: "middle", mb: "4px" }} /> y luego en{" "}
+                    <span style={{ fontWeight: "bold" }}>Agregar a Inicio</span>.
                   </div>,
                   { type: "blank", duration: 8000 },
                 );
@@ -394,7 +361,7 @@ export const ProfileSidebar = () => {
               }}
             >
               <PhoneIphoneRounded />
-              &nbsp; Install App
+              &nbsp; Instalar App
             </StyledMenuItem>
           )}
 
@@ -406,7 +373,7 @@ export const ProfileSidebar = () => {
           }}
           sx={{ color: "#ff4040 !important" }}
         >
-          <Logout className="LogoutIcon" /> &nbsp; Logout
+          <Logout className="LogoutIcon" /> &nbsp; Cerrar Sesión
         </StyledMenuItem>
 
         <ProfileOptionsBottom>
@@ -417,7 +384,7 @@ export const ProfileSidebar = () => {
               handleClose();
             }}
           >
-            <SettingsRounded className="SettingsRoundedIcon" /> &nbsp; Settings
+            <SettingsRounded className="SettingsRoundedIcon" /> &nbsp; Configuración
             {JSON.stringify(settings) === JSON.stringify(defaultUser.settings) &&
               user.darkmode === defaultUser.darkmode &&
               user.theme === defaultUser.theme &&
@@ -434,7 +401,7 @@ export const ProfileSidebar = () => {
               >
                 {name ? name[0].toUpperCase() : undefined}
               </UserAvatar>
-              <h4 style={{ margin: 0, fontWeight: 600 }}> {name || "User"}</h4>{" "}
+              <h4 style={{ margin: 0, fontWeight: 600 }}> {name || "Usuario"}</h4>{" "}
               {(name === null || name === "") && profilePicture === null && <PulseMenuLabel />}
             </ProfileMenuItem>
           </MenuLink>
@@ -443,47 +410,34 @@ export const ProfileSidebar = () => {
 
           <CreditsContainer translate="no">
             <span style={{ display: "flex", alignItems: "center" }}>
-              Made with &nbsp;
+              Hecho con &nbsp;
               <Favorite sx={{ fontSize: "14px" }} />
             </span>
-            <span style={{ marginLeft: "6px", marginRight: "4px" }}>by</span>
+            <span style={{ marginLeft: "6px", marginRight: "4px" }}>por</span>
             <a
               style={{ textDecoration: "none", color: "inherit" }}
-              href="https://github.com/maciekt07"
+              href="https://www.instagram.com/chriismartinezz/"
             >
-              maciekt07
+              Christian Martinez
             </a>
           </CreditsContainer>
-          <CreditsContainer>
-            {lastUpdate && (
-              <Tooltip title={timeAgo(new Date(lastUpdate))}>
-                <span>
-                  Last update:{" "}
-                  {new Intl.DateTimeFormat(navigator.language, {
-                    dateStyle: "long",
-                    timeStyle: "medium",
-                  }).format(new Date(lastUpdate))}
-                </span>
-              </Tooltip>
-            )}
-          </CreditsContainer>
+
         </ProfileOptionsBottom>
       </StyledSwipeableDrawer>
 
       <Dialog open={openInstalledDialog} onClose={() => setOpenInstalledDialog(false)}>
         <CustomDialogTitle
-          title="App installed successfully!"
-          subTitle="The app is now running as a PWA."
+          title="¡App instalada exitosamente!"
+          subTitle="La app ahora se ejecuta como PWA."
           icon={<DownloadDoneRounded />}
           onClose={() => setOpenInstalledDialog(false)}
         />
         <DialogContent>
-          You can access it from your home screen, with offline support and features like shortcuts
-          and badges.
+          Puedes acceder a ella desde tu pantalla de inicio, con soporte sin conexión y funciones como accesos directos y distintivos.
         </DialogContent>
         <DialogActions>
           <DialogBtn onClick={() => setOpenInstalledDialog(false)}>
-            <ThumbUpRounded /> &nbsp; Got it
+            <ThumbUpRounded /> &nbsp; Entendido
           </DialogBtn>
         </DialogActions>
       </Dialog>
@@ -501,13 +455,13 @@ const MenuLink = ({ to, children }: { to: string; children: React.ReactNode }) =
   const styles: React.CSSProperties = { borderRadius: "14px" };
   if (to.startsWith("/") || to === "") {
     return (
-      // React Router Link component for internal navigation
+      // Componente Link de React Router para navegación interna
       <Link to={to} style={styles}>
         {children}
       </Link>
     );
   }
-  // Render an anchor tag for external navigation
+  // Renderizar una etiqueta anchor para navegación externa
   return (
     <a href={to} target="_blank" style={styles}>
       {children}
@@ -531,7 +485,7 @@ const PulseMenuLabel = () => {
   );
 };
 
-// TODO: make avatar sticky on pages with TopBar.tsx
+// TODO: hacer que el avatar sea fijo en páginas con TopBar.tsx
 
 const Container = styled.div`
   position: absolute;
@@ -643,7 +597,7 @@ const StyledMenuItem = styled(MenuItem)`
     }
   }
 
-  /* disable all animation and transition when user prefers reduced motion */
+  /* deshabilitar todas las animaciones y transiciones cuando el usuario prefiere movimiento reducido */
   &,
   & svg,
   & .bmc-icon {

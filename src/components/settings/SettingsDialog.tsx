@@ -47,43 +47,43 @@ const settingsTabs: {
   Component: LazyExoticComponent<() => JSX.Element>;
 }[] = [
   {
-    label: "Appearance",
+    label: "Apariencia",
     icon: <PaletteRounded />,
     Component: lazy(() => import("./tabs/AppearanceTab")),
   },
   {
     label: "General",
-    heading: "General Settings",
+    heading: "Configuración General",
     icon: <SettingsRounded />,
     Component: lazy(() => import("./tabs/GeneralTab")),
   },
   {
     label: "Emoji",
-    heading: "Emoji Settings",
+    heading: "Configuración de Emojis",
     icon: <EmojiEmotionsRounded />,
     Component: lazy(() => import("./tabs/EmojiTab")),
   },
   {
-    label: "Read Aloud",
-    heading: "Read Aloud Settings",
+    label: "Leer en Voz Alta",
+    heading: "Configuración de Lectura en Voz Alta",
     icon: <RecordVoiceOverRounded />,
     Component: lazy(() => import("./tabs/ReadAloudTab")),
   },
   {
-    label: "Shortcuts",
-    heading: "Keyboard Shortcuts",
+    label: "Atajos",
+    heading: "Atajos de Teclado",
     icon: <KeyboardCommandKeyRounded />,
     Component: lazy(() => import("./tabs/ShortcutsTab")),
   },
   {
-    label: "About",
-    heading: "About This App",
+    label: "Acerca de",
+    heading: "Acerca de Esta App",
     icon: <InfoRounded />,
     Component: lazy(() => import("./tabs/AboutTab")),
   },
 ];
 
-// hash routing utils
+// utilidades de enrutamiento por hash
 const createTabSlug = (label: string): string => label.replace(/\s+/g, "");
 
 const navigateToTab = (tabIndex: number): void => {
@@ -129,13 +129,13 @@ export const SettingsDialog = ({ open, onClose, handleOpen }: SettingsProps) => 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
     navigateToTab(newValue);
-    // reset scroll instantly for new tab
+    // restablecer scroll instantáneamente para nueva pestaña
     requestAnimationFrame(() => {
       scrollRef.current?.scrollTo({ top: 0 });
     });
   };
 
-  // validate tab
+  // validar pestaña
   const handleHashChange = useCallback(() => {
     const hash = window.location.hash;
 
@@ -161,7 +161,7 @@ export const SettingsDialog = ({ open, onClose, handleOpen }: SettingsProps) => 
     } else {
       const invalidSlug = hash.match(/^#settings\/(\w+)/)?.[1];
       if (invalidSlug) {
-        showToast(`Invalid settings tab: "${invalidSlug}". Redirecting to default tab.`, {
+        showToast(`Pestaña de configuración inválida: "${invalidSlug}". Redirigiendo a pestaña por defecto.`, {
           type: "warning",
         });
         replaceWithTab(0);
@@ -197,13 +197,13 @@ export const SettingsDialog = ({ open, onClose, handleOpen }: SettingsProps) => 
     }
   }, [open]);
 
-  // theme color management
+  // gestión del color del tema
   useEffect(() => {
     const themeColorMeta = document.querySelector("meta[name=theme-color]");
     const defaultThemeColor = muiTheme.palette.secondary.main;
 
     if (themeColorMeta) {
-      // ensure this runs after App.tsx useEffect to override theme-color
+      // asegurar que esto se ejecute después del useEffect de App.tsx para anular theme-color
       setTimeout(() => {
         if (open) {
           themeColorMeta.setAttribute(
@@ -252,8 +252,8 @@ export const SettingsDialog = ({ open, onClose, handleOpen }: SettingsProps) => 
     >
       <CustomDialogTitle
         icon={<SettingsRounded />}
-        title="Settings"
-        subTitle="Manage Your settings and preferences"
+        title="Configuración"
+        subTitle="Gestiona tus configuraciones y preferencias"
         onClose={handleDialogClose}
         removeDivider
       />
@@ -264,7 +264,7 @@ export const SettingsDialog = ({ open, onClose, handleOpen }: SettingsProps) => 
           value={tabValue}
           onChange={handleTabChange}
           variant="scrollable"
-          aria-label="Settings tabs"
+          aria-label="Pestañas de Configuración"
           sx={{
             borderRight: 1,
             borderColor: "divider",
@@ -317,7 +317,7 @@ export const SettingsDialog = ({ open, onClose, handleOpen }: SettingsProps) => 
       {isMobile && (
         <CloseButtonContainer>
           <CloseButton variant="contained" onClick={handleDialogClose}>
-            Close
+            Cerrar
           </CloseButton>
         </CloseButtonContainer>
       )}

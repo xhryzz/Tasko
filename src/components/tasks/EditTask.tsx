@@ -46,7 +46,7 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
     [editedTask?.description],
   );
 
-  // Effect hook to update the editedTask with the selected emoji.
+  // Hook de efecto para actualizar la tarea editada con el emoji seleccionado.
   useEffect(() => {
     setEditedTask((prevTask) => ({
       ...(prevTask as Task),
@@ -54,23 +54,23 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
     }));
   }, [emoji]);
 
-  // Effect hook to update the editedTask when the task prop changes.
+  // Hook de efecto para actualizar la tarea editada cuando cambia la prop task.
   useEffect(() => {
     setEditedTask(task);
     setSelectedCategories(task?.category as Category[]);
   }, [task]);
 
-  // Event handler for input changes in the form fields.
+  // Manejador de eventos para cambios en los campos del formulario.
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
-    // Update the editedTask state with the changed value.
+    // Actualizar el estado de la tarea editada con el valor cambiado.
     setEditedTask((prevTask) => ({
       ...(prevTask as Task),
       [name]: value,
     }));
   };
-  // Event handler for saving the edited task.
+  // Manejador de eventos para guardar la tarea editada.
   const handleSave = () => {
     document.body.style.overflow = "auto";
     if (editedTask && !nameError && !descriptionError) {
@@ -96,7 +96,7 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
       onClose();
       showToast(
         <div>
-          Task <b translate="no">{editedTask.name}</b> updated.
+          Tarea <b translate="no">{editedTask.name}</b> actualizada.
         </div>,
       );
     }
@@ -118,7 +118,7 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (JSON.stringify(editedTask) !== JSON.stringify(task) && open) {
-        const message = "You have unsaved changes. Are you sure you want to leave?";
+        const message = "Tienes cambios sin guardar. ¿Estás seguro de que quieres salir?";
         e.returnValue = message;
         return message;
       }
@@ -148,11 +148,11 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
       }}
     >
       <CustomDialogTitle
-        title="Edit Task"
+        title="Editar Tarea"
         subTitle={
           editedTask?.lastSave
-            ? `Last edited ${timeAgo(new Date(editedTask.lastSave))} • ${formatDate(new Date(editedTask.lastSave))}`
-            : "Edit the details of the task."
+            ? `Última edición ${timeAgo(new Date(editedTask.lastSave))} • ${formatDate(new Date(editedTask.lastSave))}`
+            : "Edita los detalles de la tarea."
         }
         icon={<EditCalendarRounded />}
         onClose={onClose}
@@ -166,7 +166,7 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
           type="task"
         />
         <StyledInput
-          label="Name"
+          label="Nombre"
           name="name"
           autoComplete="off"
           value={editedTask?.name || ""}
@@ -175,15 +175,15 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
           helperText={
             editedTask?.name
               ? editedTask?.name.length === 0
-                ? "Name is required"
+                ? "El nombre es requerido"
                 : editedTask?.name.length > TASK_NAME_MAX_LENGTH
-                  ? `Name is too long (maximum ${TASK_NAME_MAX_LENGTH} characters)`
+                  ? `El nombre es demasiado largo (máximo ${TASK_NAME_MAX_LENGTH} caracteres)`
                   : `${editedTask?.name?.length}/${TASK_NAME_MAX_LENGTH}`
-              : "Name is required"
+              : "El nombre es requerido"
           }
         />
         <StyledInput
-          label="Description"
+          label="Descripción"
           name="description"
           autoComplete="off"
           value={editedTask?.description || ""}
@@ -196,12 +196,12 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
             editedTask?.description === "" || editedTask?.description === undefined
               ? undefined
               : descriptionError
-                ? `Description is too long (maximum ${DESCRIPTION_MAX_LENGTH} characters)`
+                ? `La descripción es demasiado larga (máximo ${DESCRIPTION_MAX_LENGTH} caracteres)`
                 : `${editedTask?.description?.length}/${DESCRIPTION_MAX_LENGTH}`
           }
         />
         <StyledInput
-          label="Deadline date"
+          label="Fecha límite"
           name="deadline"
           type="datetime-local"
           value={
@@ -217,7 +217,7 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
             input: {
               startAdornment: editedTask?.deadline ? (
                 <InputAdornment position="start">
-                  <Tooltip title="Clear">
+                  <Tooltip title="Limpiar">
                     <IconButton
                       color="error"
                       onClick={() => {
@@ -271,7 +271,7 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
         </div>
       </DialogContent>
       <DialogActions>
-        <DialogBtn onClick={handleCancel}>Cancel</DialogBtn>
+        <DialogBtn onClick={handleCancel}>Cancelar</DialogBtn>
         <DialogBtn
           onClick={handleSave}
           color="primary"
@@ -283,7 +283,7 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
             JSON.stringify(editedTask) === JSON.stringify(task)
           }
         >
-          <SaveRounded /> &nbsp; Save
+          <SaveRounded /> &nbsp; Guardar
         </DialogBtn>
       </DialogActions>
     </Dialog>

@@ -17,7 +17,7 @@ const TaskDetails = () => {
   const task = tasks.find((task) => task.id.toString().replace(".", "") === formattedId);
 
   useEffect(() => {
-    document.title = `Todo App - ${task?.name || "Task Details"}`;
+    document.title = `Tasko - ${task?.name || "Detalles de Tarea"}`;
   }, [task?.name]);
 
   if (!task) {
@@ -25,7 +25,7 @@ const TaskDetails = () => {
       <NotFound
         message={
           <div>
-            Task with id <PathName>{formattedId}</PathName> was not found.
+            No se encontró la tarea con ID <PathName>{formattedId}</PathName>.
           </div>
         }
       />
@@ -39,10 +39,10 @@ const TaskDetails = () => {
 
   return (
     <>
-      <TopBar title="Task Details" />
+      <TopBar title="Detalles de Tarea" />
       <Container>
         <TaskName>
-          Task: <span translate="no">{task.name}</span>
+          Tarea: <span translate="no">{task.name}</span>
         </TaskName>
         <TaskTable>
           <tbody>
@@ -55,7 +55,7 @@ const TaskDetails = () => {
                     {task.emoji})
                   </>
                 ) : (
-                  <i>none</i>
+                  <i>ninguno</i>
                 )}
               </TableData>
             </TableRow>
@@ -64,8 +64,8 @@ const TaskDetails = () => {
               <TableData>{task?.id}</TableData>
             </TableRow>
             <TableRow>
-              <TableHeader>Description:</TableHeader>
-              <TableData translate="no">{task?.description}</TableData>
+              <TableHeader>Descripción:</TableHeader>
+              <TableData translate="no">{task?.description || <i>ninguna</i>}</TableData>
             </TableRow>
             <TableRow>
               <TableHeader>Color:</TableHeader>
@@ -75,42 +75,42 @@ const TaskDetails = () => {
               </TableData>
             </TableRow>
             <TableRow>
-              <TableHeader>Created:</TableHeader>
+              <TableHeader>Creada:</TableHeader>
               <TableData>{dateFormatter.format(new Date(task.date))}</TableData>
             </TableRow>
             {task?.lastSave && (
               <TableRow>
-                <TableHeader>Last edited:</TableHeader>
+                <TableHeader>Última edición:</TableHeader>
                 <TableData>{dateFormatter.format(new Date(task.lastSave))}</TableData>
               </TableRow>
             )}
             {task?.deadline && (
               <TableRow>
-                <TableHeader>Task deadline:</TableHeader>
+                <TableHeader>Fecha límite:</TableHeader>
                 <TableData>{dateFormatter.format(new Date(task.deadline))}</TableData>
               </TableRow>
             )}
             <TableRow>
-              <TableHeader>Done:</TableHeader>
+              <TableHeader>Completada:</TableHeader>
               <TableData>
-                {task?.done ? <Done /> : <Clear />} {task?.done.toString()}
+                {task?.done ? <Done /> : <Clear />} {task?.done ? "Sí" : "No"}
               </TableData>
             </TableRow>
             <TableRow>
-              <TableHeader>Pinned:</TableHeader>
+              <TableHeader>Fijada:</TableHeader>
               <TableData>
-                {task?.pinned ? <Done /> : <Clear />} {task?.pinned.toString()}
+                {task?.pinned ? <Done /> : <Clear />} {task?.pinned ? "Sí" : "No"}
               </TableData>
             </TableRow>
             {task?.sharedBy && (
               <TableRow>
-                <TableHeader>Shared by: </TableHeader>
+                <TableHeader>Compartida por: </TableHeader>
                 <TableData>{task.sharedBy}</TableData>
               </TableRow>
             )}
             {task.category && task.category.length > 0 && (
               <TableRow>
-                <TableHeader>Categories:</TableHeader>
+                <TableHeader>Categorías:</TableHeader>
                 <TableData>
                   <CategoryContainer>
                     {task?.category?.map((category) => (

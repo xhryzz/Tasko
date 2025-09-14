@@ -161,7 +161,7 @@ export const TaskItem = memo(
         <TaskInfo translate="no">
           {task.pinned && (
             <Pinned translate="yes">
-              <PushPinRounded fontSize="small" /> &nbsp; Pinned
+              <PushPinRounded fontSize="small" /> &nbsp; Fijado
             </Pinned>
           )}
           <TaskHeader>

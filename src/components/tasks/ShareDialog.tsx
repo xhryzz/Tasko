@@ -47,13 +47,13 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
   const [shareTabVal, setShareTabVal] = useState<number>(0);
 
   const tabs: { label: string; icon: React.ReactElement; disabled?: boolean }[] = [
-    { label: "Link", icon: <LinkRounded /> },
-    { label: "QR Code", icon: <QrCode2Rounded /> },
-    ...(systemInfo.isAppleDevice ? [{ label: "Calendar", icon: <CalendarTodayRounded /> }] : []),
+    { label: "Enlace", icon: <LinkRounded /> },
+    { label: "Código QR", icon: <QrCode2Rounded /> },
+    ...(systemInfo.isAppleDevice ? [{ label: "Calendario", icon: <CalendarTodayRounded /> }] : []),
   ];
 
   const generateShareableLink = (task: Task, userName: string): string => {
-    // This removes id property from link as a new identifier is generated on the share page.
+    // Esto elimina la propiedad id del enlace ya que se genera un nuevo identificador en la página de compartir.
     interface TaskToShare extends Omit<Task, "id"> {
       id: undefined;
     }
@@ -66,7 +66,7 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
         category: settings.enableCategories ? task.category : undefined,
       };
 
-      // Compress the task JSON
+      // Comprimir el JSON de la tarea
       const compressedTask = LZString.compressToEncodedURIComponent(JSON.stringify(taskToShare));
       const encodedUserName = encodeURIComponent(userName);
 
@@ -76,32 +76,32 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
   };
 
   const handleCopyToClipboard = async (): Promise<void> => {
-    const linkToCopy = generateShareableLink(selectedTask, name || "User");
+    const linkToCopy = generateShareableLink(selectedTask, name || "Usuario");
     try {
       await navigator.clipboard.writeText(linkToCopy);
-      showToast("Copied link to clipboard.", {
+      showToast("Enlace copiado al portapapeles.", {
         preventDuplicate: true,
         id: "copy-sharable-link",
         visibleToasts: toasts,
       });
     } catch (error) {
-      console.error("Error copying link to clipboard:", error);
-      showToast("Error copying link to clipboard", { type: "error" });
+      console.error("Error al copiar enlace al portapapeles:", error);
+      showToast("Error al copiar enlace al portapapeles", { type: "error" });
     }
   };
 
   const handleShare = async (): Promise<void> => {
-    const linkToShare = generateShareableLink(selectedTask, name || "User");
+    const linkToShare = generateShareableLink(selectedTask, name || "Usuario");
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Share Task",
-          text: `Check out this task: ${selectedTask.name}`,
+          title: "Compartir Tarea",
+          text: `Mira esta tarea: ${selectedTask.name}`,
           url: linkToShare,
         });
       } catch (error) {
-        console.error("Error sharing link:", error);
-        showToast("Error sharing link", { type: "error" });
+        console.error("Error al compartir enlace:", error);
+        showToast("Error al compartir enlace", { type: "error" });
       }
     }
   };
@@ -117,7 +117,7 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
 
     let { description = "" } = selectedTask;
     const urlMatch = description.match(/(https?:\/\/[^\s]+)/);
-    const eventUrl = urlMatch?.[0] || ""; // extract the first url from description
+    const eventUrl = urlMatch?.[0] || ""; // extraer la primera URL de la descripción
     description = description.replace(urlMatch?.[0] || "", "").trim();
 
     const icsContent = [
@@ -132,14 +132,14 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
       "END:VEVENT",
       "END:VCALENDAR",
     ]
-      .filter(Boolean) // remove empty lines
+      .filter(Boolean) // eliminar líneas vacías
       .join("\n");
 
     const blob = new Blob([icsContent], { type: "text/calendar" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "event.ics";
+    a.download = "evento.ics";
 
     document.body.appendChild(a);
     a.click();
@@ -162,8 +162,8 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
       }}
     >
       <CustomDialogTitle
-        title="Share Task"
-        subTitle="Share your task with others."
+        title="Compartir Tarea"
+        subTitle="Comparte tu tarea con otros."
         onClose={onClose}
         icon={<IosShare />}
       />
@@ -192,10 +192,10 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
         <TabGroupProvider name="share" value={shareTabVal}>
           <TabPanel index={0}>
             <ShareField
-              value={generateShareableLink(selectedTask, name || "User")}
+              value={generateShareableLink(selectedTask, name || "Usuario")}
               fullWidth
               variant="outlined"
-              label="Shareable Link"
+              label="Enlace Compartible"
               slotProps={{
                 input: {
                   readOnly: true,
@@ -210,7 +210,7 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
                         onClick={handleCopyToClipboard}
                         sx={{ p: "12px", borderRadius: "14px", mr: "4px" }}
                       >
-                        <ContentCopyRounded /> &nbsp; Copy
+                        <ContentCopyRounded /> &nbsp; Copiar
                       </Button>
                     </InputAdornment>
                   ),
@@ -222,7 +222,7 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
             <QRCodeContainer>
               <QRCode
                 id="QRCodeShare"
-                value={generateShareableLink(selectedTask, name || "User")}
+                value={generateShareableLink(selectedTask, name || "Usuario")}
                 size={350}
                 style={{
                   borderRadius: "8px",
@@ -234,7 +234,7 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
                 variant="outlined"
                 onClick={() => saveQRCode(selectedTask.name || "")}
               >
-                <DownloadRounded /> &nbsp; Download QR Code
+                <DownloadRounded /> &nbsp; Descargar Código QR
               </DownloadQrCodeBtn>
             </QRCodeContainer>
           </TabPanel>
@@ -250,7 +250,7 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
                 }}
               >
                 <Button variant="contained" color="inherit" onClick={handleAddToAppleCalendar}>
-                  <Apple /> &nbsp; Add to Apple Calendar
+                  <Apple /> &nbsp; Agregar al Calendario Apple
                 </Button>
               </Box>
             </TabPanel>
@@ -260,18 +260,18 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
           <Alert
             severity="info"
             sx={{ mt: "20px" }}
-            //@ts-expect-error it works
+            //@ts-expect-error funciona
             color="primary"
           >
-            <AlertTitle>Share Your Task</AlertTitle>
-            Copy the link to share manually or use the share button to send it via other apps.
+            <AlertTitle>Comparte Tu Tarea</AlertTitle>
+            Copia el enlace para compartir manualmente o usa el botón de compartir para enviarlo a través de otras aplicaciones.
           </Alert>
         )}
       </DialogContent>
       <DialogActions>
-        <DialogBtn onClick={onClose}>Close</DialogBtn>
+        <DialogBtn onClick={onClose}>Cerrar</DialogBtn>
         <DialogBtn onClick={handleShare}>
-          <IosShare sx={{ mb: "4px" }} /> &nbsp; Share
+          <IosShare sx={{ mb: "4px" }} /> &nbsp; Compartir
         </DialogBtn>
       </DialogActions>
     </Dialog>

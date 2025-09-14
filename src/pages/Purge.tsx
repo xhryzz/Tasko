@@ -32,18 +32,18 @@ const Purge = () => {
     [],
     "tasksToPurge",
     "sessionStorage",
-  ); // Array of selected task IDs
+  ); // Array de IDs de tareas seleccionadas
 
   const [deleteAllDialog, setDeleteAllDialog] = useState<boolean>(false);
 
   useEffect(() => {
-    document.title = "Todo App - Purge tasks";
+    document.title = "Tasko - Purgar tareas";
   }, []);
 
   const doneTasks = tasks.filter((task) => task.done);
   const notDoneTasks = tasks.filter((task) => !task.done);
 
-  const selectedNamesList = new Intl.ListFormat("en", {
+  const selectedNamesList = new Intl.ListFormat("es", {
     style: "long",
     type: "conjunction",
   }).format(
@@ -86,14 +86,14 @@ const Purge = () => {
     purgeTasks(tasksToPurge);
     showToast(
       <div>
-        Purged selectedTasks tasks: <b translate="no">{selectedNamesList}</b>
+        Tareas seleccionadas purgadas: <b translate="no">{selectedNamesList}</b>
       </div>,
     );
   };
 
   const handlePurgeDone = () => {
     purgeTasks(doneTasks);
-    showToast("Purged all done tasks.");
+    showToast("Tareas completadas purgadas.");
   };
 
   const handlePurgeAll = () => {
@@ -134,13 +134,13 @@ const Purge = () => {
 
   return (
     <>
-      <TopBar title="Purge Tasks" />
-      <ManagementHeader>Select Tasks To Purge</ManagementHeader>
+      <TopBar title="Purgar Tareas" />
+      <ManagementHeader>Selecciona Tareas Para Purgar</ManagementHeader>
       <ManagementContainer>
-        {doneTasks.length > 0 && renderTasks(doneTasks, "Done Tasks")}
-        {notDoneTasks.length > 0 && renderTasks(notDoneTasks, "Not Done Tasks")}
+        {doneTasks.length > 0 && renderTasks(doneTasks, "Tareas Completadas")}
+        {notDoneTasks.length > 0 && renderTasks(notDoneTasks, "Tareas Pendientes")}
         {tasks.length === 0 && (
-          <h3 style={{ opacity: 0.8, fontStyle: "italic" }}>You don't have any tasks to purge</h3>
+          <h3 style={{ opacity: 0.8, fontStyle: "italic" }}>No tienes tareas para purgar</h3>
         )}
       </ManagementContainer>
       <ManagementButtonsContainer>
@@ -148,45 +148,45 @@ const Purge = () => {
           title={
             selectedTasks.length > 0 ? (
               <div>
-                <span>Selected Tasks: </span>
+                <span>Tareas Seleccionadas: </span>
                 <span translate="no">{selectedNamesList}</span>
               </div>
             ) : undefined
           }
         >
           <ManagementButton onClick={handlePurgeSelected} disabled={selectedTasks.length === 0}>
-            <DeleteSweepRounded /> &nbsp; Purge Selected{" "}
+            <DeleteSweepRounded /> &nbsp; Purgar Seleccionadas{" "}
             {selectedTasks.length > 0 && `[${selectedTasks.length}]`}
           </ManagementButton>
         </Tooltip>
         <ManagementButton onClick={handlePurgeDone} disabled={doneTasks.length === 0}>
-          <DoneAllRounded /> &nbsp; Purge Done
+          <DoneAllRounded /> &nbsp; Purgar Completadas
         </ManagementButton>
         <ManagementButton color="error" onClick={handlePurgeAll} disabled={tasks.length === 0}>
-          <DeleteForeverRounded /> &nbsp; Purge All Tasks
+          <DeleteForeverRounded /> &nbsp; Purgar Todas las Tareas
         </ManagementButton>
       </ManagementButtonsContainer>
       <Dialog open={deleteAllDialog} onClose={() => setDeleteAllDialog(false)}>
         <CustomDialogTitle
-          title="Purge All Tasks"
-          subTitle="Confirm that you want to purge all tasks"
+          title="Purgar Todas las Tareas"
+          subTitle="Confirma que quieres purgar todas las tareas"
           onClose={() => setDeleteAllDialog(false)}
           icon={<DeleteForeverRounded />}
         />
         <DialogContent>
-          This action cannot be undone. Are you sure you want to proceed?
+          Esta acción no se puede deshacer. ¿Estás seguro de que quieres continuar?
         </DialogContent>
         <DialogActions>
-          <DialogBtn onClick={() => setDeleteAllDialog(false)}>Cancel</DialogBtn>
+          <DialogBtn onClick={() => setDeleteAllDialog(false)}>Cancelar</DialogBtn>
           <DialogBtn
             color="error"
             onClick={() => {
               purgeTasks(tasks);
               setDeleteAllDialog(false);
-              showToast("Purged all tasks");
+              showToast("Todas las tareas purgadas");
             }}
           >
-            <DeleteForeverRounded /> &nbsp; Purge
+            <DeleteForeverRounded /> &nbsp; Purgar
           </DialogBtn>
         </DialogActions>
       </Dialog>

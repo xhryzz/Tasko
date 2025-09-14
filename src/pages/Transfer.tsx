@@ -40,7 +40,7 @@ const Transfer = () => {
     [],
     "tasksToExport",
     "sessionStorage",
-  ); // Array of selected task IDs
+  ); // Array de IDs de tareas seleccionadas
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isScannerOpen, setIsScannerOpen] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -48,10 +48,10 @@ const Transfer = () => {
   const n = useNavigate();
 
   useEffect(() => {
-    document.title = "Todo App - Transfer tasks";
+    document.title = "Tasko - Transferir tareas";
   }, []);
 
-  // clear file input after logout
+  // limpiar entrada de archivo después de cerrar sesión
   useEffect(() => {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -73,7 +73,7 @@ const Transfer = () => {
     exportTasksToJson(tasksToExport);
     showToast(
       <div>
-        Exported tasks:{" "}
+        Tareas exportadas:{" "}
         <ul>
           {tasksToExport.map((task) => (
             <li key={task.id}>
@@ -91,11 +91,11 @@ const Transfer = () => {
 
   const handleExportAll = () => {
     if (user.tasks.length === 0) {
-      showToast("No tasks to export", { type: "error" });
+      showToast("No hay tareas para exportar", { type: "error" });
       return;
     }
     exportTasksToJson(user.tasks);
-    showToast(`Exported all tasks (${user.tasks.length})`);
+    showToast(`Todas las tareas exportadas (${user.tasks.length})`);
   };
 
   const handleImport = useCallback(
@@ -106,8 +106,8 @@ const Transfer = () => {
         if (file.type !== "application/json") {
           showToast(
             <div>
-              Incorrect file type {file.type !== "" && <span translate="no">{file.type}</span>}.
-              Please select a JSON file.
+              Tipo de archivo incorrecto {file.type !== "" && <span translate="no">{file.type}</span>}.
+              Por favor selecciona un archivo JSON.
             </div>,
             { type: "error" },
           );
@@ -121,15 +121,15 @@ const Transfer = () => {
             const importedTasks = JSON.parse(e.target?.result as string) as Task[];
 
             if (!Array.isArray(importedTasks)) {
-              showToast("Imported file has an invalid structure.", { type: "error" });
+              showToast("El archivo importado tiene una estructura inválida.", { type: "error" });
               return;
             }
 
             /**
-             * TODO: write separate util function to check if task is not invalid
+             * TODO: escribir una función de utilidad separada para verificar si la tarea no es inválida
              */
 
-            // Check if any imported task property exceeds the maximum length
+            // Verificar si alguna propiedad de tarea importada excede la longitud máxima
             const invalidTasks = importedTasks.filter((task) => {
               const isInvalid =
                 (task.name && task.name.length > TASK_NAME_MAX_LENGTH) ||
@@ -143,10 +143,10 @@ const Transfer = () => {
             if (invalidTasks.length > 0) {
               const invalidTaskNames = invalidTasks.map((task) => task.name).join(", ");
               console.error(
-                `These tasks cannot be imported due to exceeding maximum character lengths: ${invalidTaskNames}`,
+                `Estas tareas no pueden ser importadas debido a que exceden las longitudes máximas de caracteres: ${invalidTaskNames}`,
               );
               showToast(
-                `These tasks cannot be imported due to exceeding maximum character lengths: ${invalidTaskNames}`,
+                `Estas tareas no pueden ser importadas debido a que exceden las longitudes máximas de caracteres: ${invalidTaskNames}`,
                 { type: "error" },
               );
               return;
@@ -163,7 +163,7 @@ const Transfer = () => {
             });
 
             if (hasInvalidColors) {
-              showToast("Imported file contains tasks with invalid color formats.", {
+              showToast("El archivo importado contiene tareas con formatos de color inválidos.", {
                 type: "error",
               });
               return;
@@ -181,14 +181,14 @@ const Transfer = () => {
               const maxSizeMB = maxFileSize / (1024 * 1024);
 
               showToast(
-                `File size is too large (${formatMB.format(fileSizeMB)}/${formatMB.format(maxSizeMB)})`,
+                `El tamaño del archivo es demasiado grande (${formatMB.format(fileSizeMB)}/${formatMB.format(maxSizeMB)})`,
                 { type: "error" },
               );
               return;
             }
 
-            // Update user.categories if imported categories don't exist
-            const updatedCategories = user.categories.slice(); // Create a copy of the existing categories
+            // Actualizar user.categories si las categorías importadas no existen
+            const updatedCategories = user.categories.slice(); // Crear una copia de las categorías existentes
 
             importedTasks.forEach((task) => {
               if (task.category) {
@@ -200,7 +200,7 @@ const Transfer = () => {
                   if (!existingCategory) {
                     updatedCategories.push(importedCat);
                   } else {
-                    // Replace the existing category with the imported one if the ID matches
+                    // Reemplazar la categoría existente con la importada si el ID coincide
                     Object.assign(existingCategory, importedCat);
                   }
                 });
@@ -224,15 +224,15 @@ const Transfer = () => {
 
             setUser((prevUser) => ({ ...prevUser, tasks: uniqueTasks }));
 
-            // Prepare the list of imported task names
+            // Preparar la lista de nombres de tareas importadas
             const importedTaskNames = importedTasks.map((task) => task.name).join(", ");
 
-            // Display the alert with the list of imported task names
-            console.log(`Imported Tasks: ${importedTaskNames}`);
+            // Mostrar la alerta con la lista de nombres de tareas importadas
+            console.log(`Tareas Importadas: ${importedTaskNames}`);
 
             showToast(
               <div>
-                Tasks Successfully Imported from <br />
+                Tareas Importadas Exitosamente desde <br />
                 <i translate="no" style={{ wordBreak: "break-all" }}>
                   {file.name}
                 </i>
@@ -254,10 +254,10 @@ const Transfer = () => {
               fileInputRef.current.value = "";
             }
           } catch (error) {
-            console.error(`Error parsing the imported file ${file.name}:`, error);
+            console.error(`Error analizando el archivo importado ${file.name}:`, error);
             showToast(
               <div style={{ wordBreak: "break-all" }}>
-                Error parsing the imported file: <br /> <i>{file.name}</i>
+                Error analizando el archivo importado: <br /> <i>{file.name}</i>
               </div>,
               { type: "error" },
             );
@@ -281,14 +281,13 @@ const Transfer = () => {
       } else {
         showToast(
           <div>
-            Failed to import task from the provided link. Please ensure that the link is copied
-            correctly.
+            Error al importar la tarea desde el enlace proporcionado. Por favor asegúrate de que el enlace esté copiado correctamente.
           </div>,
           { type: "error" },
         );
       }
     } catch (err) {
-      console.error("Failed to read clipboard contents: ", err);
+      console.error("Error al leer el contenido del portapapeles: ", err);
     }
   };
 
@@ -299,20 +298,20 @@ const Transfer = () => {
         const path = url.pathname + url.search + url.hash;
         n(path);
       } else {
-        showToast(<div>Failed to import task from the provided QR Code.</div>, { type: "error" });
+        showToast(<div>Error al importar la tarea desde el Código QR proporcionado.</div>, { type: "error" });
       }
     } catch (err) {
-      console.error("Failed to read clipboard contents: ", err);
+      console.error("Error al leer el contenido del portapapeles: ", err);
     }
   };
 
   const handleImportFromClipboard = async (): Promise<void> => {
     try {
       const text = await navigator.clipboard.readText();
-      const file = new File([text], "Clipboard", { type: "application/json" });
+      const file = new File([text], "Portapapeles", { type: "application/json" });
       handleImport(file);
     } catch (err) {
-      console.error("Failed to read clipboard contents: ", err);
+      console.error("Error al leer el contenido del portapapeles: ", err);
     }
   };
 
@@ -331,7 +330,7 @@ const Transfer = () => {
     if (file.size === 0 || file.type === "") {
       showToast(
         <div>
-          Unknown file type{" "}
+          Tipo de archivo desconocido{" "}
           <i translate="no" style={{ wordBreak: "break-all" }}>
             {file.name}
           </i>
@@ -350,8 +349,8 @@ const Transfer = () => {
     }
   };
 
-  // Experimental feature that allows the PWA to open JSON files directly from the file system
-  // and import tasks from the file when the app is launched with a JSON file.
+  // Característica experimental que permite a la PWA abrir archivos JSON directamente desde el sistema de archivos
+  // e importar tareas desde el archivo cuando la aplicación se inicia con un archivo JSON.
   useEffect(() => {
     if (window.launchQueue && "setConsumer" in window.launchQueue) {
       window.launchQueue.setConsumer((launchParams) => {
@@ -368,16 +367,16 @@ const Transfer = () => {
 
   return (
     <>
-      <TopBar title="Transfer" />
-      <ManagementHeader>Sync All Data</ManagementHeader>
+      <TopBar title="Transferir" />
+      <ManagementHeader>Sincronizar Todos los Datos</ManagementHeader>
       <ManagementButtonsContainer>
         <Link to="/sync" tabIndex={-1}>
           <ManagementButton variant="contained" size="large" sx={{ mb: 1 }}>
-            <PhonelinkRounded /> &nbsp; Sync With Other Device
+            <PhonelinkRounded /> &nbsp; Sincronizar con Otro Dispositivo
           </ManagementButton>
         </Link>
       </ManagementButtonsContainer>
-      <ManagementHeader>Export Tasks to JSON</ManagementHeader>
+      <ManagementHeader>Exportar Tareas a JSON</ManagementHeader>
       <ManagementContainer>
         {user.tasks.length > 0 ? (
           user.tasks.map((task: Task) => (
@@ -400,7 +399,7 @@ const Transfer = () => {
             </TaskManagementContainer>
           ))
         ) : (
-          <h3 style={{ opacity: 0.8, fontStyle: "italic" }}>You don't have any tasks to export</h3>
+          <h3 style={{ opacity: 0.8, fontStyle: "italic" }}>No tienes tareas para exportar</h3>
         )}
       </ManagementContainer>
 
@@ -408,7 +407,7 @@ const Transfer = () => {
         <Tooltip
           title={
             selectedTasks.length > 0
-              ? `Selected tasks: ${new Intl.ListFormat("en", {
+              ? `Tareas seleccionadas: ${new Intl.ListFormat("es", {
                   style: "long",
                   type: "conjunction",
                 }).format(
@@ -421,15 +420,15 @@ const Transfer = () => {
           }
         >
           <ManagementButton onClick={handleExport} disabled={selectedTasks.length === 0}>
-            <FileDownload /> &nbsp; Export Selected to JSON{" "}
+            <FileDownload /> &nbsp; Exportar Seleccionadas a JSON{" "}
             {selectedTasks.length > 0 && `[${selectedTasks.length}]`}
           </ManagementButton>
         </Tooltip>
         <ManagementButton onClick={handleExportAll} disabled={user.tasks.length === 0}>
-          <FileDownload /> &nbsp; Export All Tasks to JSON
+          <FileDownload /> &nbsp; Exportar Todas las Tareas a JSON
         </ManagementButton>
 
-        <h2 style={{ textAlign: "center" }}>Import Tasks From JSON</h2>
+        <h2 style={{ textAlign: "center" }}>Importar Tareas Desde JSON</h2>
 
         {systemInfo.os !== "Android" && systemInfo.os !== "iOS" && (
           <div style={{ width: "300px" }}>
@@ -440,7 +439,7 @@ const Transfer = () => {
               isDragging={isDragging}
             >
               <FileUpload fontSize="large" color="primary" />
-              <div>Drop JSON file here to import tasks </div>
+              <div>Suelta el archivo JSON aquí para importar tareas </div>
             </DropZone>
           </div>
         )}
@@ -456,7 +455,7 @@ const Transfer = () => {
             width: "300px",
           }}
         >
-          <FileUpload /> &nbsp; Select JSON File
+          <FileUpload /> &nbsp; Seleccionar Archivo JSON
           <VisuallyHiddenInput
             accept=".json"
             type="file"
@@ -466,23 +465,23 @@ const Transfer = () => {
         </Button>
 
         <ManagementButton onClick={handleImportFromClipboard}>
-          <IntegrationInstructionsRounded /> &nbsp; Import JSON from clipboard
+          <IntegrationInstructionsRounded /> &nbsp; Importar JSON desde el portapapeles
         </ManagementButton>
-        <h2 style={{ textAlign: "center" }}>Import Task From a Link</h2>
+        <h2 style={{ textAlign: "center" }}>Importar Tarea Desde un Enlace</h2>
         <ManagementButton onClick={() => setIsScannerOpen(true)}>
-          <QrCodeScannerRounded /> &nbsp; Scan QR Code
+          <QrCodeScannerRounded /> &nbsp; Escanear Código QR
         </ManagementButton>
-        {/* Solution for PWA on iOS: */}
+        {/* Solución para PWA en iOS: */}
         <ManagementButton onClick={handleImportFromLink}>
-          <LinkIcon /> &nbsp; Paste Link
+          <LinkIcon /> &nbsp; Pegar Enlace
         </ManagementButton>
       </ManagementButtonsContainer>
       <QRCodeScannerDialog
-        subTitle="Import task by scanning a QR code"
+        subTitle="Importar tarea escaneando un código QR"
         open={isScannerOpen}
         onClose={() => setIsScannerOpen(false)}
         onScan={(result) => {
-          showToast("QR Code scanned successfully!");
+          showToast("¡Código QR escaneado exitosamente!");
           setIsScannerOpen(false);
           if (result[0].rawValue) {
             handleImportFromQRCode(result[0].rawValue);

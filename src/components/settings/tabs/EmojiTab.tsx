@@ -35,14 +35,13 @@ export default function EmojiTab() {
   );
 
   const isOnline = useOnlineStatus();
-  // update local state when user settings change (e.g. after P2P sync)
   useEffect(() => {
     setEmojiStyleValue(user.emojisStyle);
   }, [user.darkmode, user.emojisStyle]);
 
   return (
     <>
-      <SectionHeading>Emoji Style</SectionHeading>
+      <SectionHeading>Estilo de Emoji</SectionHeading>
       <CustomRadioGroup
         options={emojiStyles}
         value={emojiStyleValue}
@@ -58,25 +57,27 @@ export default function EmojiTab() {
 
       {!isOnline && (
         <Alert severity="warning" sx={{ mt: "8px" }} icon={<WifiOffRounded />}>
-          <AlertTitle>Offline Mode</AlertTitle>
-          You are currently offline. Non-native emoji styles may not load.
+          <AlertTitle>Modo Sin Conexión</AlertTitle>
+          Actualmente estás sin conexión. Los estilos de emoji no nativos pueden no cargarse.
         </Alert>
       )}
+
       <CustomSwitch
         settingKey="simpleEmojiPicker"
-        header="Simple Emoji Picker"
-        text="Show only recent emojis for faster loading."
+        header="Selector de Emoji Simple"
+        text="Mostrar solo los emojis recientes para una carga más rápida."
         disabled={!hasEmojiData}
-        disabledReason="No recent emojis available."
+        disabledReason="No hay emojis recientes disponibles."
       />
-      <SectionHeading>Emoji Data</SectionHeading>
-      <SectionDescription> Clear data about recently used emojis</SectionDescription>
+
+      <SectionHeading>Datos de Emoji</SectionHeading>
+      <SectionDescription> Borrar datos de emojis usados recientemente</SectionDescription>
       <Button
         variant="contained"
         color="error"
         onClick={() => {
           localStorage.removeItem("epr_suggested");
-          showToast("Removed emoji data.");
+          showToast("Datos de emojis eliminados.");
           setHasEmojiData(false);
           if (user.settings.simpleEmojiPicker) {
             setUser((prev) => ({
@@ -86,7 +87,7 @@ export default function EmojiTab() {
           }
         }}
       >
-        <DeleteRounded /> &nbsp; Clear Emoji Data
+        <DeleteRounded /> &nbsp; Borrar Datos de Emoji
       </Button>
     </>
   );

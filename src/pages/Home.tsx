@@ -36,10 +36,10 @@ const Home = () => {
   const isMobile = useResponsiveDisplay();
 
   useEffect(() => {
-    document.title = "Todo App";
+    document.title = "Tasko";
   }, []);
 
-  // Calculate these values only when tasks change
+  // Calcular estos valores solo cuando las tareas cambien
   const taskStats = useMemo(() => {
     const completedCount = tasks.filter((task) => task.done).length;
     const completedPercentage = tasks.length > 0 ? (completedCount / tasks.length) * 100 : 0;
@@ -63,34 +63,34 @@ const Home = () => {
     };
   }, [tasks]);
 
-  // Memoize time-based greeting
+  // Memoizar saludo basado en la hora
   const timeGreeting = useMemo(() => {
     const currentHour = new Date().getHours();
     if (currentHour < 12 && currentHour >= 5) {
-      return "Good morning";
+      return "Buenos días";
     } else if (currentHour < 18 && currentHour > 12) {
-      return "Good afternoon";
+      return "Buenas tardes";
     } else {
-      return "Good evening";
+      return "Buenas noches";
     }
   }, []);
 
-  // Memoize task completion text
+  // Memoizar texto de completitud de tareas
   const taskCompletionText = useMemo(() => {
     const percentage = taskStats.completedTaskPercentage;
     switch (true) {
       case percentage === 0:
-        return "No tasks completed yet. Keep going!";
+        return "No hay tareas completadas aún. ¡Sigue adelante!";
       case percentage === 100:
-        return "Congratulations! All tasks completed!";
+        return "¡Felicidades! ¡Todas las tareas completadas!";
       case percentage >= 75:
-        return "Almost there!";
+        return "¡Casi allí!";
       case percentage >= 50:
-        return "You're halfway there! Keep it up!";
+        return "¡Vas a la mitad! ¡Sigue así!";
       case percentage >= 25:
-        return "You're making good progress.";
+        return "Estás haciendo buen progreso.";
       default:
-        return "You're just getting started.";
+        return "Recién estás comenzando.";
     }
   }, [taskStats.completedTaskPercentage]);
 
@@ -119,7 +119,7 @@ const Home = () => {
 
       {!isOnline && (
         <Offline>
-          <WifiOff /> You're offline but you can use the app!
+          <WifiOff /> ¡Estás sin conexión pero puedes usar la app!
         </Offline>
       )}
       {tasks.length > 0 && settings.showProgressBar && (
@@ -131,14 +131,14 @@ const Home = () => {
                 updateShowProgressBar(false);
                 showToast(
                   <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                    Progress bar hidden. You can enable it in settings.
+                    Barra de progreso oculta. Puedes activarla en configuraciones.
                     <Button
                       variant="contained"
                       sx={{ p: "12px 32px" }}
                       onClick={() => updateShowProgressBar(true)}
                       startIcon={<UndoRounded />}
                     >
-                      Undo
+                      Deshacer
                     </Button>
                   </span>,
                 );
@@ -152,7 +152,7 @@ const Home = () => {
                 value={taskStats.completedTaskPercentage}
                 size={64}
                 thickness={5}
-                aria-label="Progress"
+                aria-label="Progreso"
                 glow={settings.enableGlow}
               />
 
@@ -170,8 +170,8 @@ const Home = () => {
             <TaskCountTextContainer>
               <TaskCountHeader>
                 {taskStats.completedTasksCount === 0
-                  ? `You have ${tasks.length} task${tasks.length > 1 ? "s" : ""} to complete.`
-                  : `You've completed ${taskStats.completedTasksCount} out of ${tasks.length} tasks.`}
+                  ? `Tienes ${tasks.length} tarea${tasks.length > 1 ? "s" : ""} por completar.`
+                  : `Has completado ${taskStats.completedTasksCount} de ${tasks.length} tareas.`}
               </TaskCountHeader>
               <TaskCompletionText>{taskCompletionText}</TaskCompletionText>
               {taskStats.tasksWithDeadlineTodayCount > 0 && (
@@ -182,9 +182,9 @@ const Home = () => {
                   }}
                 >
                   <TodayRounded sx={{ fontSize: "20px", verticalAlign: "middle" }} />
-                  &nbsp;Tasks due today:&nbsp;
+                  &nbsp;Tareas para hoy:&nbsp;
                   <span translate="no">
-                    {new Intl.ListFormat("en", { style: "long" }).format(
+                    {new Intl.ListFormat("es", { style: "long" }).format(
                       taskStats.tasksDueTodayNames,
                     )}
                   </span>
@@ -204,12 +204,12 @@ const Home = () => {
         <TasksList />
       </Suspense>
       {!isMobile && (
-        <Tooltip title={tasks.length > 0 ? "Add New Task" : "Add Task"} placement="left">
+        <Tooltip title={tasks.length > 0 ? "Agregar Nueva Tarea" : "Agregar Tarea"} placement="left">
           <AddButton
             animate={tasks.length === 0}
             glow={settings.enableGlow}
             onClick={() => n("add")}
-            aria-label="Add Task"
+            aria-label="Agregar Tarea"
           >
             <AddRounded style={{ fontSize: "44px" }} />
           </AddButton>

@@ -18,22 +18,22 @@ const sortOptions: {
 }[] = [
   {
     value: "dateCreated",
-    label: "Date Created",
+    label: "Fecha de Creación",
     icon: <AccessTimeRounded fontSize="small" />,
   },
   {
     value: "dueDate",
-    label: "Due Date",
+    label: "Fecha de Vencimiento",
     icon: <CalendarTodayRounded fontSize="small" />,
   },
   {
     value: "alphabetical",
-    label: "Alphabetical",
+    label: "Alfabético",
     icon: <SortByAlphaRounded fontSize="small" />,
   },
   {
     value: "custom",
-    label: "Custom",
+    label: "Personalizado",
     icon: <MoveUpRounded fontSize="small" />,
   },
 ];
@@ -68,7 +68,7 @@ export const TaskSort = () => {
       >
         {currentSortOption?.icon}
         <ButtonContent>
-          <SortLabel>Sort by</SortLabel>
+          <SortLabel>Ordenar por</SortLabel>
           <SortValue>{currentSortOption?.label}</SortValue>
         </ButtonContent>
       </SortButton>

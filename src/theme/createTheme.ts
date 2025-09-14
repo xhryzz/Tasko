@@ -11,7 +11,7 @@ import { ColorPalette, themeConfig } from "./themeConfig";
  */
 export const createCustomTheme = (
   primaryColor: string,
-  backgroundColor = "#232e58",
+  backgroundColor = "#081341",
   mode: PaletteMode = "dark",
 ): Theme => {
   return createTheme({

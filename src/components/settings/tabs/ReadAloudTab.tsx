@@ -54,7 +54,7 @@ export default function ReadAloudTab() {
 
   const readAloudEnabled = user.settings.enableReadAloud && "speechSynthesis" in window;
 
-  // Cancel speech synthesis when the voice settings are changed
+  // Cancelar síntesis de voz cuando se cambian los ajustes de voz
   useEffect(() => {
     if (!readAloudEnabled) {
       return;
@@ -65,7 +65,7 @@ export default function ReadAloudTab() {
     }
   }, [readAloudEnabled]);
 
-  // Function to get the available speech synthesis voices
+  // Función para obtener las voces de síntesis de voz disponibles
   // https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis
   const getAvailableVoices = (): SpeechSynthesisVoice[] => {
     if (!window.speechSynthesis) {
@@ -99,7 +99,7 @@ export default function ReadAloudTab() {
     };
   }, [readAloudEnabled]);
 
-  // Ensure the voices are loaded before calling getAvailableVoices
+  // Asegurar que las voces se carguen antes de llamar a getAvailableVoices
   if (readAloudEnabled) {
     window.speechSynthesis.onvoiceschanged = () => {
       const availableVoices = getAvailableVoices();
@@ -110,7 +110,7 @@ export default function ReadAloudTab() {
   const handleVoiceChange = (event: SelectChangeEvent<unknown>) => {
     const voice = event.target.value as AppSettings["voice"];
     if (voice) {
-      // Update the user settings with the selected voice
+      // Actualizar la configuración del usuario con la voz seleccionada
       setUser((prevUser) => ({
         ...prevUser,
         settings: {
@@ -123,7 +123,7 @@ export default function ReadAloudTab() {
 
   const filteredVoices: SpeechSynthesisVoice[] = availableVoices
     .filter(
-      // remove duplicate voices as iOS/macOS tend to duplicate them for some reason
+      // eliminar voces duplicadas ya que iOS/macOS tiende a duplicarlas por alguna razón
       (value, index, self) =>
         index ===
         self.findIndex(
@@ -136,7 +136,7 @@ export default function ReadAloudTab() {
         ),
     )
     .sort((a, b) => {
-      // prioritize voices matching user language
+      // priorizar voces que coincidan con el idioma del usuario
       const aIsFromCountry = a.lang.startsWith(navigator.language);
       const bIsFromCountry = b.lang.startsWith(navigator.language);
 
@@ -147,7 +147,7 @@ export default function ReadAloudTab() {
         return 1;
       }
 
-      // If both or neither match navigator.language, sort alphabetically by lang
+      // Si ambas o ninguna coinciden con navigator.language, ordenar alfabéticamente por lang
       return a.lang.localeCompare(b.lang);
     });
 
@@ -161,16 +161,16 @@ export default function ReadAloudTab() {
         return new Intl.DisplayNames([lang], { type: "region" }).of(langParts[1]);
       } catch (error) {
         console.error("Error:", error);
-        // Return the language itself if there's an error
+        // Devolver el idioma mismo si hay un error
         return lang;
       }
     } else {
-      // If region is not specified, return the language itself
+      // Si la región no está especificada, devolver el idioma mismo
       return lang;
     }
   };
 
-  // Function to handle changes in voice volume after mouse up
+  // Función para manejar cambios en el volumen de voz después de soltar el mouse
   const handleVoiceVolCommitChange = (
     _event: Event | React.SyntheticEvent<Element, Event>,
     value: number | number[],
@@ -184,10 +184,10 @@ export default function ReadAloudTab() {
     }));
   };
 
-  // Function to handle mute/unmute button click
+  // Función para manejar el clic en el botón de silenciar/activar sonido
   const handleMuteClick = () => {
     const vol = voiceVolume;
-    // Save the previous voice volume before muting
+    // Guardar el volumen de voz anterior antes de silenciar
     setPrevVoiceVol(vol);
     const newVoiceVolume =
       vol === 0 ? (prevVoiceVol !== 0 ? prevVoiceVol : defaultUser.settings.voiceVolume) : 0;
@@ -202,13 +202,13 @@ export default function ReadAloudTab() {
   };
 
   const getFlagUnicodes = (countryCode: string): string => {
-    // get the last part of the country code (PL from pl-PL)
+    // obtener la última parte del código de país (PL de pl-PL)
     const region = countryCode.split("-").pop()?.toUpperCase().slice(0, 2);
 
     if (!region || region.length !== 2) {
-      throw new Error("Invalid country code format");
+      throw new Error("Formato de código de país inválido");
     }
-    // convert each letter into a regional indicator symbol
+    // convertir cada letra en un símbolo de indicador regional
     const [codePointA, codePointB] = [...region].map((char) => char.charCodeAt(0) - 0x41 + 0x1f1e6);
 
     return `${codePointA.toString(16)}-${codePointB.toString(16)}`;
@@ -218,18 +218,18 @@ export default function ReadAloudTab() {
     <>
       {!("speechSynthesis" in window) && (
         <Alert severity="error">
-          <AlertTitle>Speech Synthesis Not Supported</AlertTitle>
-          Your browser does not support built in text-to-speech.
+          <AlertTitle>Síntesis de Voz No Compatible</AlertTitle>
+          Tu navegador no soporta texto a voz incorporado.
         </Alert>
       )}
       <CustomSwitch
         settingKey="enableReadAloud"
-        header="Enable Read Aloud"
-        text="Loads voices and shows Read Aloud in the task menu."
+        header="Habilitar Lectura en Voz Alta"
+        text="Carga voces y muestra Leer en Voz Alta en el menú de tareas."
         disabled={!("speechSynthesis" in window)}
       />
       <ReadAloudWrapper active={readAloudEnabled} disabled={!readAloudEnabled}>
-        <SectionHeading>Play Sample</SectionHeading>
+        <SectionHeading>Reproducir Muestra</SectionHeading>
         <Button
           variant="contained"
           disabled={!("speechSynthesis" in window)}
@@ -240,7 +240,7 @@ export default function ReadAloudTab() {
             if (isSampleReading) {
               window.speechSynthesis.pause();
             } else {
-              const textToRead = "This is a sample text for testing the speech synthesis feature.";
+              const textToRead = "Este es un texto de muestra para probar la función de síntesis de voz.";
               const utterance = new SpeechSynthesisUtterance(textToRead);
               const voices = window.speechSynthesis.getVoices() ?? [];
               utterance.voice =
@@ -256,9 +256,9 @@ export default function ReadAloudTab() {
             setIsSampleReading((prev) => !prev);
           }}
         >
-          {isSampleReading ? <StopCircleRounded /> : <RecordVoiceOverRounded />} &nbsp; Play Sample
+          {isSampleReading ? <StopCircleRounded /> : <RecordVoiceOverRounded />} &nbsp; Reproducir Muestra
         </Button>
-        <SectionHeading>Voice Selection</SectionHeading>
+        <SectionHeading>Selección de Voz</SectionHeading>
         {filteredVoices.length !== 0 ? (
           <StyledSelect
             value={user.settings.voice}
@@ -275,14 +275,14 @@ export default function ReadAloudTab() {
               },
             }}
             sx={{
-              // fix: stop hidden input from triggering caret/keyboard on this select
+              // fix: evitar que input oculto active cursor/teclado en este select
               "& .MuiSelect-nativeInput": {
                 pointerEvents: "none",
               },
             }}
           >
             {(() => {
-              // group voices by language match
+              // agrupar voces por coincidencia de idioma
               const matchingLanguageVoices = filteredVoices.filter((voice) =>
                 voice.lang.startsWith(navigator.language),
               );
@@ -290,7 +290,7 @@ export default function ReadAloudTab() {
                 (voice) => !voice.lang.startsWith(navigator.language),
               );
 
-              // function to render a voice item consistently
+              // función para renderizar un elemento de voz consistentemente
               const renderVoiceItem = (voice: SpeechSynthesisVoice) => (
                 <MenuItem
                   key={`${voice.name}::${voice.lang}`}
@@ -320,14 +320,14 @@ export default function ReadAloudTab() {
                     }
                   />
                   {voice.default && systemInfo.os !== "iOS" && systemInfo.os !== "macOS" && (
-                    <span style={{ fontWeight: 600 }}>&nbsp; Default</span>
+                    <span style={{ fontWeight: 600 }}>&nbsp; Predeterminada</span>
                   )}
                   {voice.localService === false && (
                     <span style={{ marginLeft: "auto", display: "flex", alignItems: "center" }}>
                       {!isOnline ? (
                         <CloudOffRounded sx={{ fontSize: "18px" }} />
                       ) : (
-                        <Tooltip title="Requires Internet Connection" placement="left">
+                        <Tooltip title="Requiere Conexión a Internet" placement="left">
                           <CloudQueueRounded sx={{ fontSize: "18px" }} />
                         </Tooltip>
                       )}
@@ -336,7 +336,7 @@ export default function ReadAloudTab() {
                 </MenuItem>
               );
 
-              // create voice groups with headers
+              // crear grupos de voces con encabezados
               const createVoiceGroup = (
                 voices: SpeechSynthesisVoice[],
                 headerText: string,
@@ -350,22 +350,22 @@ export default function ReadAloudTab() {
                 ];
               };
 
-              // return all menu items
+              // devolver todos los elementos del menú
               return [
                 ...createVoiceGroup(
                   matchingLanguageVoices,
-                  `Your Language (${getLanguageRegion(navigator.language)})`,
+                  `Tu Idioma (${getLanguageRegion(navigator.language)})`,
                   "header-matching",
                 ),
-                ...createVoiceGroup(otherVoices, "Other Languages", "header-other"),
+                ...createVoiceGroup(otherVoices, "Otros Idiomas", "header-other"),
               ];
             })()}
           </StyledSelect>
         ) : (
           <NoVoiceStyles>
-            There are no voice styles available.
+            No hay estilos de voz disponibles.
             {user.settings.enableReadAloud && "speechSynthesis" in window && (
-              <Tooltip title="Refetch voices">
+              <Tooltip title="Volver a buscar voces">
                 <IconButton
                   size="large"
                   onClick={() => setAvailableVoices(getAvailableVoices() ?? [])}
@@ -378,14 +378,14 @@ export default function ReadAloudTab() {
         )}
         {!isOnline && availableVoices.some((voice) => voice.localService === false) && (
           <Alert severity="warning" sx={{ mt: "8px" }} icon={<WifiOffRounded />}>
-            <AlertTitle>Offline Mode</AlertTitle>
-            You are currently offline. Some Voices may require an internet connection to work.
+            <AlertTitle>Modo Sin Conexión</AlertTitle>
+            Actualmente estás sin conexión. Algunas voces pueden requerir conexión a internet para funcionar.
           </Alert>
         )}
-        <SectionHeading>Voice Volume</SectionHeading>
+        <SectionHeading>Volumen de Voz</SectionHeading>
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
           <VolumeSlider spacing={2} direction="row" alignItems="center">
-            {/* <Tooltip title={voiceVolume ? "Mute" : "Unmute"}> */}
+            {/* <Tooltip title={voiceVolume ? "Silenciar" : "Activar sonido"}> */}
             <IconButton onClick={handleMuteClick}>
               {voiceVolume === 0 ? (
                 <VolumeOff />
@@ -406,10 +406,10 @@ export default function ReadAloudTab() {
               min={0}
               max={1}
               step={0.01}
-              aria-label="Volume Slider"
+              aria-label="Control deslizante de volumen"
               valueLabelFormat={() => {
                 const vol = Math.floor(voiceVolume * 100);
-                return vol === 0 ? "Muted" : vol + "%";
+                return vol === 0 ? "Silenciado" : vol + "%";
               }}
               valueLabelDisplay="auto"
             />

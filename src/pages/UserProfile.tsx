@@ -86,7 +86,7 @@ const UserProfile = () => {
   const handleSaveName = () => {
     if (userName.length <= USER_NAME_MAX_LENGTH && userName !== name) {
       setUser({ ...user, name: userName });
-      showToast("Updated user name");
+      showToast("Nombre Actualizado");
       setUserName("");
     }
   };
@@ -206,9 +206,9 @@ const UserProfile = () => {
 
   return (
     <>
-      <TopBar title="User Profile" />
+      <TopBar title="Perfil de Usuario" />
       <Container glow={user.settings.enableGlow}>
-        <Tooltip title="App Settings">
+        <Tooltip title="Ajustes">
           <IconButton
             onClick={() => (window.location.hash = "#settings")}
             aria-label="Settings"
@@ -274,13 +274,13 @@ const UserProfile = () => {
         >
           <CreatedAtDate>
             <TodayRounded fontSize="small" />
-            &nbsp;Registered {timeAgo(createdAt)}
+            &nbsp;Registrado {timeAgo(createdAt)}
           </CreatedAtDate>
         </Tooltip>
 
         <TextField
           sx={{ width: "300px", marginTop: "8px" }}
-          label={name === null ? "Add Name" : "Change Name"}
+          label={name === null ? "Añadir nombre" : "Cambiar nombre"}
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSaveName()}
@@ -301,7 +301,7 @@ const UserProfile = () => {
           onClick={handleSaveName}
           disabled={userName.length > USER_NAME_MAX_LENGTH || userName === name}
         >
-          Save name
+          Guardar Cambios
         </SaveBtn>
         <Button
           color="error"

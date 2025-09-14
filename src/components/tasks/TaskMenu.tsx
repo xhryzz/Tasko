@@ -67,7 +67,7 @@ export const TaskMenu = () => {
   };
 
   const handleMarkAsDone = () => {
-    // Toggles the "done" property of the selected task
+    // Alterna la propiedad "done" de la tarea seleccionada
     if (selectedTaskId) {
       handleCloseMoreMenu();
       const updatedTasks = tasks.map((task) => {
@@ -86,9 +86,9 @@ export const TaskMenu = () => {
       if (allTasksDone) {
         showToast(
           <div>
-            <b>All tasks done</b>
+            <b>Todas las tareas completadas</b>
             <br />
-            <span>You've checked off all your todos. Well done!</span>
+            <span>Has marcado todas tus tareas. ¡Bien hecho!</span>
           </div>,
           {
             icon: (
@@ -103,7 +103,7 @@ export const TaskMenu = () => {
   };
 
   const handlePin = () => {
-    // Toggles the "pinned" property of the selected task
+    // Alterna la propiedad "pinned" de la tarea seleccionada
     if (selectedTaskId) {
       handleCloseMoreMenu();
       const updatedTasks = tasks.map((task) => {
@@ -123,16 +123,16 @@ export const TaskMenu = () => {
     handleCloseMoreMenu();
     if (selectedTaskId) {
       if (selectedTask) {
-        // Create a duplicated task with a new ID and current date
+        // Crear una tarea duplicada con un nuevo ID y fecha actual
         const duplicatedTask: Task = {
           ...selectedTask,
           id: generateUUID(),
           date: new Date(),
           lastSave: undefined,
         };
-        // Add the duplicated task to the existing tasks
+        // Agregar la tarea duplicada a las tareas existentes
         const updatedTasks = [...tasks, duplicatedTask];
-        // Update the user object with the updated tasks
+        // Actualizar el objeto usuario con las tareas actualizadas
         setUser((prevUser) => ({
           ...prevUser,
           tasks: updatedTasks,
@@ -149,21 +149,21 @@ export const TaskMenu = () => {
     const taskName = selectedTask.name ? selectedTask.name + ". " : "";
     const taskDescription = selectedTask?.description
       ? selectedTask?.description?.replace(/((?:https?):\/\/[^\s/$.?#].[^\s]*)/gi, "") + ". "
-      : ""; // remove links from description
-    // Read task date in voice language
+      : ""; // eliminar enlaces de la descripción
+    // Leer fecha de tarea en el idioma de la voz
     const taskDate = new Intl.DateTimeFormat(voice ? voice.lang : navigator.language, {
       dateStyle: "full",
       timeStyle: "short",
     }).format(new Date(selectedTask?.date || ""));
 
     const taskDeadline = selectedTask?.deadline
-      ? `. Task Deadline: ${calculateDateDifference(
+      ? `. Fecha límite: ${calculateDateDifference(
           new Date(selectedTask.deadline),
           voice ? voice.lang : navigator.language,
         )}`
       : "";
 
-    const textToRead = `${taskName}${taskDescription}Date: ${taskDate}${taskDeadline}`;
+    const textToRead = `${taskName}${taskDescription}Fecha: ${taskDate}${taskDeadline}`;
 
     const utterThis: SpeechSynthesisUtterance = new SpeechSynthesisUtterance(textToRead);
 
@@ -198,10 +198,10 @@ export const TaskMenu = () => {
         return (
           <ReadAloudContainer>
             <ReadAloudHeader translate="yes">
-              <RecordVoiceOver /> Read aloud: <span translate="no">{selectedTask?.name}</span>
+              <RecordVoiceOver /> Leer en voz alta: <span translate="no">{selectedTask?.name}</span>
             </ReadAloudHeader>
             <span translate="yes" style={{ marginTop: "8px", fontSize: "16px" }}>
-              Voice: <span translate="no">{utterThis.voice?.name || "Default"}</span>
+              Voz: <span translate="no">{utterThis.voice?.name || "Predeterminada"}</span>
             </span>
             <div translate="no">
               <Marquee delay={0.6} play={isPlaying}>
@@ -245,11 +245,11 @@ export const TaskMenu = () => {
       },
     );
 
-    // Set up event listener for the end of speech
+    // Configurar event listener para el final del habla
     utterThis.onend = () => {
-      // Close the menu
+      // Cerrar el menú
       handleCloseMoreMenu();
-      // Hide the toast when speech ends
+      // Ocultar el toast cuando termina el habla
       toast.dismiss(SpeechToastId);
     };
 
@@ -261,12 +261,12 @@ export const TaskMenu = () => {
   const menuItems: JSX.Element[] = [
     <StyledMenuItem key="done" onClick={handleMarkAsDone}>
       {selectedTask.done ? <Close /> : <Done />}
-      &nbsp; {selectedTask.done ? "Mark as not done" : "Mark as done"}
+      &nbsp; {selectedTask.done ? "Marcar como no completada" : "Marcar como completada"}
     </StyledMenuItem>,
 
     <StyledMenuItem key="pin" onClick={handlePin}>
       <PushPinRounded sx={{ textDecoration: "line-through" }} />
-      &nbsp; {selectedTask.pinned ? "Unpin" : "Pin"}
+      &nbsp; {selectedTask.pinned ? "Desfijar" : "Fijar"}
     </StyledMenuItem>,
 
     ...(multipleSelectedTasks.length === 0
@@ -276,7 +276,7 @@ export const TaskMenu = () => {
             onClick={() => handleSelectTask(selectedTaskId || generateUUID())}
             disabled={moveMode}
           >
-            <RadioButtonChecked /> &nbsp; Select
+            <RadioButtonChecked /> &nbsp; Seleccionar
           </StyledMenuItem>,
         ]
       : []),
@@ -291,7 +291,7 @@ export const TaskMenu = () => {
               setSearch("");
               handleCloseMoreMenu();
               if (user.settings.sortOption !== "custom") {
-                showToast("Changed sort option to: Custom", { type: "info" });
+                showToast("Opción de orden cambiada a: Personalizado", { type: "info" });
               }
               setUser((prevUser) => ({
                 ...prevUser,
@@ -302,13 +302,13 @@ export const TaskMenu = () => {
               }));
             }}
           >
-            <MoveUpRounded /> &nbsp; Move
+            <MoveUpRounded /> &nbsp; Mover
           </StyledMenuItem>,
         ]
       : []),
 
     <StyledMenuItem key="details" onClick={redirectToTaskDetails}>
-      <LaunchRounded /> &nbsp; Task details
+      <LaunchRounded /> &nbsp; Detalles de tarea
     </StyledMenuItem>,
 
     ...(settings.enableReadAloud && "speechSynthesis" in window
@@ -321,7 +321,7 @@ export const TaskMenu = () => {
               (window.speechSynthesis.speaking || window.speechSynthesis.pending)
             }
           >
-            <RecordVoiceOverRounded /> &nbsp; Read Aloud
+            <RecordVoiceOverRounded /> &nbsp; Leer en voz alta
           </StyledMenuItem>,
         ]
       : []),
@@ -333,7 +333,7 @@ export const TaskMenu = () => {
         handleCloseMoreMenu();
       }}
     >
-      <LinkRounded /> &nbsp; Share
+      <LinkRounded /> &nbsp; Compartir
     </StyledMenuItem>,
 
     <Divider key="divider-1" />,
@@ -345,11 +345,11 @@ export const TaskMenu = () => {
         handleCloseMoreMenu();
       }}
     >
-      <EditRounded /> &nbsp; Edit
+      <EditRounded /> &nbsp; Editar
     </StyledMenuItem>,
 
     <StyledMenuItem key="duplicate" onClick={handleDuplicateTask}>
-      <ContentCopy /> &nbsp; Duplicate
+      <ContentCopy /> &nbsp; Duplicar
     </StyledMenuItem>,
 
     <Divider key="divider-2" />,
@@ -362,7 +362,7 @@ export const TaskMenu = () => {
         handleCloseMoreMenu();
       }}
     >
-      <DeleteRounded /> &nbsp; Delete
+      <DeleteRounded /> &nbsp; Eliminar
     </StyledMenuItem>,
   ];
 
@@ -391,7 +391,7 @@ export const TaskMenu = () => {
 
   return (
     <>
-      {/* close sheet instantly if motion is reduced */}
+      {/* cerrar hoja instantáneamente si el movimiento está reducido */}
       {isMobile && (prefersReducedMotion ? Boolean(anchorEl) && sheet : sheet)}
 
       {!isMobile && (

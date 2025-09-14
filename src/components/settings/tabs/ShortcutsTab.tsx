@@ -7,24 +7,28 @@ export default function ShortcutsTab() {
   return (
     <>
       <ShortcutItem
-        name="Quick Export"
-        description="Save all tasks and download as JSON file"
+        name="Exportación Rápida"
+        description="Guardar todas las tareas y descargar como archivo JSON"
         keys={[cmdOrCtrl, "S"]}
       />
-      <ShortcutItem name="Quick Search" description="Focus search input" keys={[cmdOrCtrl, "/"]} />
       <ShortcutItem
-        name="Print Tasks"
-        description="Print the current task list"
+        name="Búsqueda Rápida"
+        description="Enfocar el campo de búsqueda"
+        keys={[cmdOrCtrl, "/"]}
+      />
+      <ShortcutItem
+        name="Imprimir Tareas"
+        description="Imprimir la lista actual de tareas"
         keys={[cmdOrCtrl, "P"]}
       />
       <ShortcutItem
-        name="Toggle Theme"
-        description="Switch between light and dark mode"
+        name="Cambiar Tema"
+        description="Alternar entre modo claro y oscuro"
         keys={[cmdOrCtrl, "Shift", "L"]}
       />
       {/* <ShortcutItem
-        name="Toggle Sidebar"
-        description="Open or close the sidebar"
+        name="Alternar Barra Lateral"
+        description="Abrir o cerrar la barra lateral"
         keys={[cmdOrCtrl, "B"]}
       /> */}
     </>

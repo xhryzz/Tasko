@@ -18,16 +18,15 @@ export default function AboutTab() {
   return (
     <>
       <Typography variant="body1" sx={{ mb: 2 }}>
-        📝 A simple todo app project made using React.js and MUI with many features, including
-        sharing tasks via link, P2P synchronization using WebRTC, theme customization and offline
-        usage as a Progressive Web App (PWA).
+        📝 Una aplicación de tareas sencilla creada con React.js y MUI, con muchas funciones, incluyendo
+        compartir tareas mediante enlace, sincronización P2P usando WebRTC, personalización de temas y uso
+        sin conexión como una Progressive Web App (PWA).
       </Typography>
-      <img src={baner} style={{ width: "100%", height: "auto" }} alt="Todo App Screenshot" />
       <Typography variant="caption" sx={{ display: "block", mt: 2 }}>
-        Created by <Link href="https://github.com/maciekt07">maciekt07</Link> <br />
-        Explore the project on GitHub:{" "}
-        <Link href="https://github.com/maciekt07/TodoApp" target="_blank" rel="noopener noreferrer">
-          Todo App Repository
+        Creado por <Link href="https://github.com/maciekt07https://www.instagram.com/chriismartinezz/">chriismartinezz</Link> <br />
+        Puedes hacerme una donación:{" "}
+        <Link href="https://www.paypal.com/paypalme/chriismartinezz" target="_blank" rel="noopener noreferrer">
+          PayPal
         </Link>
       </Typography>
       {storageUsage !== undefined && storageUsage !== 0 && (
@@ -36,7 +35,7 @@ export default function AboutTab() {
           <FormGroup>
             <FormLabel sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <Inventory2Rounded sx={{ fontSize: "18px" }} />
-              Storage Usage
+              Uso de Almacenamiento
             </FormLabel>
             <Box sx={{ mt: "2px" }}>
               {storageUsage ? `${(storageUsage / 1024 / 1024).toFixed(2)} MB` : "0 MB"}

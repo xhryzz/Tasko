@@ -3,7 +3,7 @@ import type { User } from "../types/user";
 import { systemInfo } from "../utils";
 
 /**
- * Represents a default user object.
+ * Representa un objeto de usuario por defecto.
  */
 export const defaultUser: User = {
   name: null,
@@ -58,7 +58,7 @@ export const defaultUser: User = {
   ],
   deletedCategories: [],
   favoriteCategories: ["ebe6ce8b-471f-4632-a23b-578e1038ce51"],
-  //TODO: make default colors better
+  //TODO: hacer que los colores por defecto sean mejores
   colorList: [
     "#FF69B4",
     "#FF22B4",

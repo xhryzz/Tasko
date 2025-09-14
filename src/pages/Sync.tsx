@@ -63,7 +63,7 @@ export default function Sync() {
   }, [otherDataSyncOption]);
 
   useEffect(() => {
-    document.title = "Todo App - Sync Data";
+    document.title = "Tasko - Sincronizar Datos";
   }, []);
 
   const handleScan = (text: string | null) => {
@@ -74,8 +74,8 @@ export default function Sync() {
       setMode("scan");
       connectToHost(scannedId);
     } catch (err) {
-      showToast("Failed to scan QR Code", { type: "error" });
-      console.error("Error scanning QR Code:", err);
+      showToast("Error al escanear el código QR", { type: "error" });
+      console.error("Error escaneando código QR:", err);
     }
   };
 
@@ -83,11 +83,11 @@ export default function Sync() {
     if (!src) return null;
 
     if (src === "this_device") {
-      return mode === "display" ? "This Device" : "Host Device";
+      return mode === "display" ? "Este Dispositivo" : "Dispositivo Anfitrión";
     }
 
     if (src === "other_device") {
-      return mode === "display" ? "Other Device" : "This Device";
+      return mode === "display" ? "Otro Dispositivo" : "Este Dispositivo";
     }
 
     return null;
@@ -95,7 +95,7 @@ export default function Sync() {
 
   return (
     <>
-      <TopBar title="Sync Data" />
+      <TopBar title="Sincronizar Datos" />
       <MainContainer>
         {!mode && (
           <>
@@ -104,12 +104,12 @@ export default function Sync() {
                 sx={{ fontSize: 40, color: (theme) => theme.palette.primary.main }}
               />
               <Typography variant="h5" sx={{ fontWeight: 600, mb: 1 }}>
-                Sync Data Between Devices
+                Sincronizar Datos Entre Dispositivos
               </Typography>
               <Typography variant="body1" sx={{ mb: 2, opacity: 0.9 }}>
-                Securely transfer your tasks, categories and other data between devices with a
-                single QR Code scan using peer-to-peer connection. No data is stored or processed on
-                external servers.
+                Transfiere de forma segura tus tareas, categorías y otros datos entre dispositivos
+                escaneando un único código QR usando una conexión peer-to-peer. Ningún dato se
+                almacena o procesa en servidores externos.
               </Typography>
               {user.lastSyncedAt && (
                 <Tooltip
@@ -120,14 +120,14 @@ export default function Sync() {
                   placement="top"
                 >
                   <LastSyncedText>
-                    <AccessTimeRounded /> &nbsp; Last synced {timeAgo(new Date(user.lastSyncedAt))}
+                    <AccessTimeRounded /> &nbsp; Última sincronización {timeAgo(new Date(user.lastSyncedAt))}
                   </LastSyncedText>
                 </Tooltip>
               )}
               {!isOnline && (
                 <Alert icon={<WifiOffRounded />} severity="error" sx={{ textAlign: "left", mt: 4 }}>
-                  <AlertTitle>Offline</AlertTitle>
-                  You're offline. Both devices must be online to start a peer-to-peer sync.
+                  <AlertTitle>Sin conexión</AlertTitle>
+                  Estás sin conexión. Ambos dispositivos deben estar en línea para iniciar una sincronización peer-to-peer.
                 </Alert>
               )}
             </FeatureDescription>
@@ -143,7 +143,7 @@ export default function Sync() {
                   }}
                   startIcon={<QrCodeRounded />}
                 >
-                  Display QR Code
+                  Mostrar Código QR
                 </SyncButton>
                 <SyncButton
                   variant="outlined"
@@ -153,7 +153,7 @@ export default function Sync() {
                   }}
                   startIcon={<QrCodeScannerRounded />}
                 >
-                  Scan QR Code
+                  Escanear Código QR
                 </SyncButton>
               </DisabledThemeProvider>
             </ModeSelectionContainer>
@@ -163,7 +163,7 @@ export default function Sync() {
         {mode === "display" && (
           <StyledPaper>
             <ModeHeader>
-              <WifiTetheringRounded /> Host Mode
+              <WifiTetheringRounded /> Modo Anfitrión
             </ModeHeader>
             {hostPeerId ? (
               isSeverity(syncStatus.severity, "success") ? (
@@ -180,10 +180,10 @@ export default function Sync() {
                     size={300}
                     style={{ backgroundColor: "white", borderRadius: "8px", padding: "8px" }}
                   />
-                  <QRCodeLabel>Scan this QR code with another device to sync data</QRCodeLabel>
+                  <QRCodeLabel>Escanea este código QR con otro dispositivo para sincronizar datos</QRCodeLabel>
                   <FormControl>
                     <StyledFormLabel id="sync-radio-buttons-group-label">
-                      Sync App Settings & Other Data
+                      Sincronizar Configuración de la App & Otros Datos
                     </StyledFormLabel>
                     <RadioGroup
                       row={!isMobile}
@@ -197,17 +197,17 @@ export default function Sync() {
                       <StyledFormControlLabel
                         value="this_device"
                         control={<Radio />}
-                        label="This Device"
+                        label="Este Dispositivo"
                       />
                       <StyledFormControlLabel
                         value="other_device"
                         control={<Radio />}
-                        label="Other Device"
+                        label="Otro Dispositivo"
                       />
                       <StyledFormControlLabel
                         value="no_sync"
                         control={<Radio />}
-                        label="Don't Sync"
+                        label="No Sincronizar"
                       />
                     </RadioGroup>
                   </FormControl>
@@ -217,7 +217,7 @@ export default function Sync() {
                       color: (theme) => (theme.palette.mode === "dark" ? "#ffffff" : "#000000"),
                     }}
                   >
-                    Tasks and categories will be synced automatically.
+                    Las tareas y categorías se sincronizarán automáticamente.
                   </Typography>
                   <SyncStatusAlert syncStatus={syncStatus} />
                   <SyncButton
@@ -226,10 +226,10 @@ export default function Sync() {
                     color={isSeverity(syncStatus.severity, "error") ? "error" : "primary"}
                   >
                     {isSeverity(syncStatus.severity, "error") ? (
-                      "Try Again"
+                      "Intentar de Nuevo"
                     ) : (
                       <>
-                        <RestartAltRounded /> &nbsp; Reset
+                        <RestartAltRounded /> &nbsp; Reiniciar
                       </>
                     )}
                   </SyncButton>
@@ -238,7 +238,7 @@ export default function Sync() {
             ) : (
               <LoadingContainer>
                 <CircularProgress size={24} />
-                <LoadingText>Initializing...</LoadingText>
+                <LoadingText>Inicializando...</LoadingText>
               </LoadingContainer>
             )}
           </StyledPaper>
@@ -247,7 +247,7 @@ export default function Sync() {
         {mode === "scan" && (
           <StyledPaper>
             <ModeHeader>
-              <QrCodeScannerRounded /> Scan Mode
+              <QrCodeScannerRounded /> Modo Escaneo
             </ModeHeader>
             {isSeverity(syncStatus.severity, "success") ? (
               <SyncSuccessScreen
@@ -259,8 +259,8 @@ export default function Sync() {
             ) : (
               <Stack spacing={2} alignItems="center">
                 <SyncStatusAlert syncStatus={syncStatus} />
-                {(syncStatus.message === "Connecting to host..." ||
-                  syncStatus.message === "Connected, sending your data...") && (
+                {(syncStatus.message === "Conectando al anfitrión..." ||
+                  syncStatus.message === "Conectado, enviando tus datos...") && (
                   <LoadingContainer>
                     <CircularProgress size={24} />
                     <LoadingText>{syncStatus.message}</LoadingText>
@@ -272,10 +272,10 @@ export default function Sync() {
                   color={isSeverity(syncStatus.severity, "error") ? "error" : "primary"}
                 >
                   {isSeverity(syncStatus.severity, "error") ? (
-                    "Try Again"
+                    "Intentar de Nuevo"
                   ) : (
                     <>
-                      <RestartAltRounded /> &nbsp; Reset
+                      <RestartAltRounded /> &nbsp; Reiniciar
                     </>
                   )}
                 </SyncButton>
@@ -285,15 +285,15 @@ export default function Sync() {
         )}
 
         <QRCodeScannerDialog
-          subTitle="Scan a QR code to sync."
+          subTitle="Escanea un código QR para sincronizar."
           open={scannerOpen}
           onClose={() => setScannerOpen(false)}
           onScan={(result) => {
             if (result && result[0]?.rawValue) handleScan(result[0].rawValue);
           }}
           onError={(err) => {
-            console.error("QR scan error:", err);
-            showToast("Error scanning QR.", { type: "error" });
+            console.error("Error de escaneo QR:", err);
+            showToast("Error al escanear QR.", { type: "error" });
             setScannerOpen(false);
           }}
         />
@@ -315,8 +315,8 @@ export function SyncSuccessScreen({
   return (
     <Stack spacing={2} alignItems="center">
       <StyledAlert severity={syncStatus.severity} icon={undefined}>
-        <b>Sync Complete</b>
-        <div>{syncStatus.message || "Idle"}</div>
+        <b>Sincronización Completada</b>
+        <div>{syncStatus.message || "Inactivo"}</div>
       </StyledAlert>
       {otherDataSource && (
         <Typography
@@ -326,12 +326,12 @@ export function SyncSuccessScreen({
             color: (theme) => (theme.palette.mode === "dark" ? "#ffffff" : "#000000"),
           }}
         >
-          Settings and other data{" "}
+          La configuración y otros datos{" "}
           {otherDataSource === "no_sync" ? (
-            "were not synced."
+            "no se sincronizaron."
           ) : (
             <>
-              were imported from <b>{getOtherDataSourceLabel(otherDataSource)}.</b>
+              se importaron desde <b>{getOtherDataSourceLabel(otherDataSource)}.</b>
             </>
           )}
         </Typography>
@@ -341,7 +341,7 @@ export function SyncSuccessScreen({
         onClick={resetAll}
         color={syncStatus.severity === "success" ? "success" : "primary"}
       >
-        Done
+        Hecho
       </SyncButton>
     </Stack>
   );
@@ -363,10 +363,10 @@ function SyncStatusAlert({ syncStatus }: { syncStatus: SyncStatus }) {
         {syncStatus.severity === "error"
           ? "Error"
           : syncStatus.severity === "warning"
-            ? "Warning"
-            : "Status"}
+            ? "Advertencia"
+            : "Estado"}
       </AlertTitle>
-      {syncStatus.message || "Idle"}
+      {syncStatus.message || "Inactivo"}
     </StyledAlert>
   );
 }

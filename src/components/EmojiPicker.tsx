@@ -46,7 +46,7 @@ import DisabledThemeProvider from "../contexts/DisabledThemeProvider";
 
 interface EmojiPickerProps {
   emoji?: string;
-  setEmoji: Dispatch<SetStateAction<string | null>>; // TODO: use onEmojiChange instead
+  setEmoji: Dispatch<SetStateAction<string | null>>; // TODO: usar onEmojiChange en su lugar
   color?: string;
   name?: string;
   type?: "task" | "category";
@@ -83,24 +83,24 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
     return topUnified;
   };
 
-  // When the currentEmoji state changes, update the parent component's emoji state
+  // Cuando cambia el estado currentEmoji, actualizar el estado emoji del componente padre
   useEffect(() => {
     setEmoji(currentEmoji);
   }, [currentEmoji, setEmoji]);
 
-  // When the emoji prop changes to an empty string, set the currentEmoji state to undefined
+  // Cuando la propiedad emoji cambia a una cadena vacía, establecer el estado currentEmoji a undefined
   useEffect(() => {
     if (emoji === "") {
       setCurrentEmoji(null);
     }
   }, [emoji]);
 
-  // Function to toggle the visibility of the EmojiPicker
+  // Función para alternar la visibilidad del EmojiPicker
   const toggleEmojiPicker = () => {
     setShowEmojiPicker((prevState) => !prevState);
   };
 
-  // Handler function for when an emoji is clicked in the EmojiPicker
+  // Función manejadora para cuando se hace clic en un emoji en el EmojiPicker
   const handleEmojiClick = (e: EmojiClickData) => {
     toggleEmojiPicker();
     setCurrentEmoji(e.unified);
@@ -114,7 +114,7 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
   const [isAILoading, setIsAILoading] = useState<boolean>(false);
   const [session, setSession] = useState<LanguageModel | null>(null);
 
-  // Create Session on component mount for faster first load
+  // Crear Sesión al montar el componente para una primera carga más rápida
   useEffect(() => {
     const createSession = async () => {
       if ("LanguageModel" in window) {
@@ -125,7 +125,7 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
     createSession();
   }, []);
 
-  // ‼ This feature works only in Chrome (Dev / Canary) version 127 or higher with some flags enabled and Gemini Nano model installed
+  // ‼ Esta característica solo funciona en Chrome (Dev / Canary) versión 127 o superior con algunas flags habilitadas y el modelo Gemini Nano instalado
   // https://developer.chrome.com/docs/ai/built-in
   async function useAI(): Promise<void> {
     const start = new Date().getTime();
@@ -133,40 +133,40 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
     try {
       const sessionInstance: LanguageModel = session || (await LanguageModel.create());
 
-      // chrome://flags/#text-safety-classifier must be disabled to make this prompt work
+      // chrome://flags/#text-safety-classifier debe estar deshabilitado para que este prompt funcione
       const response = await sessionInstance.prompt(
-        `Respond with ONLY ONE emoji that best represents this task: "${name}". DO NOT include any other text, explanations, or symbols. Just the SINGLE emoji.`,
+        `Responde con SOLO UN emoji que mejor represente esta tarea: "${name}". NO incluyas ningún otro texto, explicaciones o símbolos. Solo el ÚNICO emoji.`,
       );
 
-      console.log("Full AI response:", response);
+      console.log("Respuesta completa de IA:", response);
 
-      // this doesn't split emojis into separate characters
+      // esto no separa los emojis en caracteres individuales
       const emojiRegex =
         /\p{RI}\p{RI}|\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?(\u{200D}\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?)+|\p{EPres}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?|\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})/gu;
 
       const extractedEmojis = response.trim().replace(/\*/g, "").match(emojiRegex) || [];
 
-      // Remove duplicates
+      // Eliminar duplicados
       const uniqueEmojis = [...new Set(extractedEmojis)];
-      console.log("Unique Emojis:", uniqueEmojis);
+      console.log("Emojis únicos:", uniqueEmojis);
 
       if (uniqueEmojis.length === 0) {
         setCurrentEmoji(null);
         showToast(
           <div>
-            <b>No emoji found.</b> <br /> Please try again with different {type} name.
+            <b>No se encontró ningún emoji.</b> <br /> Por favor intenta con un nombre de {type} diferente.
           </div>,
           {
             type: "error",
           },
         );
-        console.error("No emoji found.");
+        console.error("No se encontró ningún emoji.");
         return;
       }
 
       let emojiResponse = uniqueEmojis[0];
 
-      // Check if the emoji needs to be replaced
+      // Verificar si el emoji necesita ser reemplazado
       const emojiMap: {
         [key: string]: string;
       } = {
@@ -181,11 +181,11 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
 
       if (emojiResponse in emojiMap) {
         emojiResponse = emojiMap[emojiResponse];
-        console.log("Emoji replaced with:", emojiResponse);
+        console.log("Emoji reemplazado con:", emojiResponse);
       }
 
       const unified = emojiToUnified(emojiResponse.replaceAll(":", ""));
-      console.log("Emoji unified:", unified);
+      console.log("Emoji unificado:", unified);
 
       if (emojiRegex.test(emojiResponse)) {
         setIsAILoading(false);
@@ -194,13 +194,13 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
         setCurrentEmoji(null);
         showToast(
           <div>
-            <b>Invalid emoji.</b> <br /> Please try again with different {type} name.
+            <b>Emoji inválido.</b> <br /> Por favor intenta con un nombre de {type} diferente.
           </div>,
           {
             type: "error",
           },
         );
-        console.error("Invalid emoji.", unified);
+        console.error("Emoji inválido.", unified);
       }
     } catch (error) {
       setIsAILoading(false);
@@ -208,7 +208,7 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
       console.error(error);
       showToast(
         <div>
-          <b>Falied to generate emoji.</b>
+          <b>Error al generar emoji.</b>
           <br />
           {String(error)}
         </div>,
@@ -218,7 +218,7 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
       setIsAILoading(false);
       const end = new Date().getTime();
       console.log(
-        `%cTook ${end - start}ms to generate.`,
+        `%cTomó ${end - start}ms en generar.`,
         `color: ${end - start > 1500 ? "orange" : "lime"}`,
       );
     }
@@ -231,9 +231,9 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
       .toLowerCase();
   };
 
-  // end of AI experimental feature code
+  // fin del código de característica experimental de IA
 
-  // Function to render the content of the Avatar based on whether an emoji is selected or not
+  // Función para renderizar el contenido del Avatar basado en si se ha seleccionado un emoji o no
   const renderAvatarContent = () => {
     const fontColor = color ? getFontColor(color) : ColorPalette.fontLight;
     if (isAILoading) {
@@ -297,7 +297,7 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
         </Badge>
       </EmojiContainer>
       {"LanguageModel" in window && name !== undefined && (
-        <Tooltip title={!name ? `Enter a name for the ${type} to find emoji` : undefined}>
+        <Tooltip title={!name ? `Ingresa un nombre para el ${type} para encontrar emoji` : undefined}>
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <DisabledThemeProvider>
               <Button
@@ -309,13 +309,13 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
                     : name.length > CATEGORY_NAME_MAX_LENGTH)
                 }
               >
-                <AutoAwesome /> &nbsp; Find emoji with AI
+                <AutoAwesome /> &nbsp; Encontrar emoji con IA
               </Button>
             </DisabledThemeProvider>
           </div>
         </Tooltip>
       )}
-      {/* Simple Emoji Picker */}
+      {/* Selector Simple de Emojis */}
       {showEmojiPicker && settings.simpleEmojiPicker && (
         <SimplePickerContainer>
           <Suspense fallback={<CircularProgress size={40} thickness={5} />}>
@@ -332,7 +332,7 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
           </Suspense>
           {currentEmoji && (
             <Button onClick={handleRemoveEmoji} fullWidth variant="outlined" color="error">
-              <RemoveCircleOutline /> &nbsp; Remove Emoji
+              <RemoveCircleOutline /> &nbsp; Eliminar Emoji
             </Button>
           )}
         </SimplePickerContainer>
@@ -354,8 +354,8 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
             }}
           >
             <CustomDialogTitle
-              title="Choose Emoji"
-              subTitle={`Choose the perfect emoji for your ${type}.`}
+              title="Elegir Emoji"
+              subTitle={`Elige el emoji perfecto para tu ${type}.`}
               onClose={toggleEmojiPicker}
               icon={<AddReaction />}
             />
@@ -363,8 +363,7 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
               {!isOnline && emojisStyle !== EmojiStyle.NATIVE && (
                 <Box sx={{ mx: "14px", mb: "16px" }}>
                   <Alert severity="warning">
-                    Emojis may not load correctly when offline. Try switching to the native emoji
-                    style.
+                    Los emojis pueden no cargarse correctamente sin conexión. Intenta cambiar al estilo de emoji nativo.
                   </Alert>
                   <Button
                     variant="outlined"
@@ -380,7 +379,7 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
                       setTimeout(() => setShowEmojiPicker(true), 100);
                     }}
                   >
-                    <EmojiEmotions /> &nbsp; Switch to Native Emoji
+                    <EmojiEmotions /> &nbsp; Cambiar a Emoji Nativo
                   </Button>
                 </Box>
               )}
@@ -403,10 +402,10 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
                     suggestedEmojisMode={SuggestionMode.FREQUENT}
                     autoFocusSearch={false}
                     onEmojiClick={handleEmojiClick}
-                    searchPlaceHolder="Search emoji"
+                    searchPlaceHolder="Buscar emoji"
                     previewConfig={{
                       defaultEmoji: "1f4dd",
-                      defaultCaption: `Choose the perfect emoji for your ${type}`,
+                      defaultCaption: `Elige el emoji perfecto para tu ${type}`,
                     }}
                   />
                 </Suspense>
@@ -415,13 +414,13 @@ export const CustomEmojiPicker = ({ emoji, setEmoji, color, name, type }: EmojiP
             <DialogActions>
               {currentEmoji && (
                 <DialogBtn color="error" onClick={handleRemoveEmoji}>
-                  <RemoveCircleOutline /> &nbsp; Remove Emoji
+                  <RemoveCircleOutline /> &nbsp; Eliminar Emoji
                 </DialogBtn>
               )}
               {/* <DialogBtn onClick={() => n("#settings/Emoji")}>
-                <SettingsRounded /> &nbsp; Settings
+                <SettingsRounded /> &nbsp; Configuración
               </DialogBtn> */}
-              <DialogBtn onClick={toggleEmojiPicker}>Cancel</DialogBtn>
+              <DialogBtn onClick={toggleEmojiPicker}>Cancelar</DialogBtn>
             </DialogActions>
           </Dialog>
         </>

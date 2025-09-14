@@ -19,8 +19,8 @@ function App() {
   const { user, setUser } = useContext(UserContext);
   const systemTheme = useSystemTheme();
 
-  // Initialize user properties if they are undefined
-  // this allows to add new properties to the user object without error
+  // Inicializar propiedades del usuario si son undefined
+  // esto permite agregar nuevas propiedades al objeto de usuario sin error
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updateNestedProperties = (userObject: any, defaultObject: any): any => {
@@ -46,7 +46,7 @@ function App() {
 
         if (key === "settings" && Array.isArray(userObject.settings)) {
           delete userObject.settings;
-          showToast("Removed old settings array format.", {
+          showToast("Se eliminó el antiguo formato de array de configuraciones.", {
             duration: 6000,
             icon: <DeleteForeverRounded />,
             disableVibrate: true,
@@ -62,7 +62,7 @@ function App() {
           userObject[key] = defaultValue;
           showToast(
             <div>
-              Added new property to user object{" "}
+              Se agregó nueva propiedad al objeto de usuario{" "}
               <i translate="no">
                 {key.toString()}: {userObject[key].toString()}
               </i>
@@ -91,7 +91,7 @@ function App() {
         try {
           await navigator.setAppBadge(count);
         } catch (error) {
-          console.error("Failed to set app badge:", error);
+          console.error("Error al establecer el distintivo de la app:", error);
         }
       }
     };
@@ -101,7 +101,7 @@ function App() {
         try {
           await navigator.clearAppBadge();
         } catch (error) {
-          console.error("Failed to clear app badge:", error);
+          console.error("Error al limpiar el distintivo de la app:", error);
         }
       }
     };

@@ -27,22 +27,22 @@ import { ColorElement } from "../../../styles";
 
 const darkModeOptions: OptionItem<DarkModeOptions>[] = [
   {
-    label: "Auto",
+    label: "Automático",
     value: "auto",
     icon: <BrightnessAutoRounded sx={{ fontSize: OPTION_ICON_SIZE }} />,
   },
   {
-    label: "System",
+    label: "Sistema",
     value: "system",
     icon: <PersonalVideoRounded sx={{ fontSize: OPTION_ICON_SIZE }} />,
   },
   {
-    label: "Light",
+    label: "Claro",
     value: "light",
     icon: <LightModeRounded sx={{ fontSize: OPTION_ICON_SIZE }} />,
   },
   {
-    label: "Dark",
+    label: "Oscuro",
     value: "dark",
     icon: <DarkModeRounded sx={{ fontSize: OPTION_ICON_SIZE }} />,
   },
@@ -50,17 +50,17 @@ const darkModeOptions: OptionItem<DarkModeOptions>[] = [
 
 const reduceMotionOptions: OptionItem<ReduceMotionOption>[] = [
   {
-    label: "System",
+    label: "Sistema",
     value: "system",
     icon: <PersonalVideoRounded sx={{ fontSize: OPTION_ICON_SIZE }} />,
   },
   {
-    label: "Always",
+    label: "Siempre",
     value: "on",
     icon: <MotionPhotosOffRounded sx={{ fontSize: OPTION_ICON_SIZE }} />,
   },
   {
-    label: "Never",
+    label: "Nunca",
     value: "off",
     icon: <MotionPhotosAutoRounded sx={{ fontSize: OPTION_ICON_SIZE }} />,
   },
@@ -75,7 +75,7 @@ export default function AppearanceTab() {
 
   const systemTheme = useSystemTheme();
 
-  // update local state when user settings change (e.g. after P2P sync)
+  // actualizar estado local cuando cambia la configuración del usuario (ej. después de sincronización P2P)
   useEffect(() => {
     setDarkModeValue(user.darkmode);
   }, [user.darkmode, user.emojisStyle]);
@@ -90,7 +90,7 @@ export default function AppearanceTab() {
 
   return (
     <>
-      <SectionHeading>Dark Mode Options</SectionHeading>
+      <SectionHeading>Opciones de Modo Oscuro</SectionHeading>
       <CustomRadioGroup
         options={darkModeOptions}
         value={darkModeValue}
@@ -102,7 +102,7 @@ export default function AppearanceTab() {
           }));
         }}
       />
-      <SectionHeading>Theme Selection</SectionHeading>
+      <SectionHeading>Selección de Tema</SectionHeading>
       <StyledSelect
         value={user.theme}
         onChange={handleAppThemeChange}
@@ -110,7 +110,7 @@ export default function AppearanceTab() {
       >
         <StyledMenuItem value="system">
           <PersonalVideoRounded />
-          &nbsp; System ({systemTheme === "dark" ? Themes[0].name : Themes[1].name})
+          &nbsp; Sistema ({systemTheme === "dark" ? Themes[0].name : Themes[1].name})
         </StyledMenuItem>
         {Themes.map((theme) => (
           <StyledMenuItem key={theme.name} value={theme.name}>
@@ -118,7 +118,7 @@ export default function AppearanceTab() {
               tabIndex={-1}
               clr={theme.MuiTheme.palette.primary.main}
               secondClr={theme.MuiTheme.palette.secondary.main}
-              aria-label={`Change theme - ${theme.name}`}
+              aria-label={`Cambiar tema - ${theme.name}`}
               size="24px"
               disableHover
             />
@@ -127,9 +127,9 @@ export default function AppearanceTab() {
           </StyledMenuItem>
         ))}
       </StyledSelect>
-      <SectionHeading>Reduce Motion Options</SectionHeading>
+      <SectionHeading>Opciones de Reducir Movimiento</SectionHeading>
       <SectionDescription>
-        Reduce animations and transitions for a more stable experience.
+        Reduce animaciones y transiciones para una experiencia más estable.
       </SectionDescription>
       <CustomRadioGroup
         options={reduceMotionOptions}
@@ -147,8 +147,8 @@ export default function AppearanceTab() {
       />
       <CustomSwitch
         settingKey="enableGlow"
-        header="Enable Glow Effect"
-        text="Add a soft glow to tasks for better visibility."
+        header="Habilitar Efecto de Resplandor"
+        text="Añade un resplandor suave a las tareas para mejor visibilidad."
       />
     </>
   );
